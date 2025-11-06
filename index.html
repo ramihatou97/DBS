@@ -391,6 +391,7 @@
             <a href="#provincial" class="nav-link">Provincial</a>
             <a href="#regression" class="nav-link">Statistics</a>
             <a href="#maps" class="nav-link">Maps</a>
+            <a href="#static-maps" class="nav-link">Static Maps</a>
         </div>
     </nav>
 
@@ -503,6 +504,109 @@
                 </a>
             </div>
 
+        </section>
+
+        <!-- Static Maps Section -->
+        <section id="static-maps">
+            <h2>📊 Static Maps</h2>
+            <p style="font-size: 1.1rem; color: var(--medium-gray); margin-bottom: 2rem;">
+                High-quality 300 DPI static versions of all interactive maps, perfect for publications, presentations, and reports.
+                Click any map to view full size.
+            </p>
+
+            <!-- Analytical Maps -->
+            <h3 style="color: var(--aqua-dark); margin-top: 2rem; margin-bottom: 1.5rem;">🗺️ Analytical Maps</h3>
+            <div class="figure-grid">
+                <div class="figure-single">
+                    <img src="maps_nov2025/static_map1_travel_burden_heatmap.png" alt="Travel Burden Heatmap" onclick="openModal(this.src)" style="cursor: pointer;">
+                    <div class="figure-caption"><strong>Travel Burden Heatmap</strong><br>19% of patients face extreme distances (>200km)</div>
+                </div>
+                <div class="figure-single">
+                    <img src="maps_nov2025/static_map3_indigenous_access_crisis.png" alt="Indigenous Access Crisis" onclick="openModal(this.src)" style="cursor: pointer;">
+                    <div class="figure-caption"><strong>Indigenous Access Crisis</strong><br>Communities with >10% Indigenous ancestry face systematic barriers</div>
+                </div>
+                <div class="figure-single">
+                    <img src="maps_nov2025/static_map_atlantic_crisis.png" alt="Atlantic Crisis" onclick="openModal(this.src)" style="cursor: pointer;">
+                    <div class="figure-caption"><strong>Atlantic Regional Crisis</strong><br>Extreme isolation in Eastern Canada (1,400+ km for NL)</div>
+                </div>
+                <div class="figure-single">
+                    <img src="maps_nov2025/static_map5_patient_flow_animated.png" alt="Patient Flow Lines" onclick="openModal(this.src)" style="cursor: pointer;">
+                    <div class="figure-caption"><strong>Patient Migration Patterns</strong><br>Catchment areas and flow lines to DBS centers</div>
+                </div>
+                <div class="figure-single">
+                    <img src="maps_nov2025/static_map_individual_patient_journeys.png" alt="Individual Patient Journeys" onclick="openModal(this.src)" style="cursor: pointer;">
+                    <div class="figure-caption"><strong>Individual Patient Journeys</strong><br>All 936 patient paths to DBS centers</div>
+                </div>
+                <div class="figure-single">
+                    <img src="maps_nov2025/static_map12_regression_drivers.png" alt="Regression Drivers" onclick="openModal(this.src)" style="cursor: pointer;">
+                    <div class="figure-caption"><strong>What Drives Disparity</strong><br>Indigenous ancestry is the strongest predictor of poor access</div>
+                </div>
+                <div class="figure-single">
+                    <img src="maps_nov2025/static_map13_comparative_analysis_2015_2023.png" alt="Temporal Comparison" onclick="openModal(this.src)" style="cursor: pointer;">
+                    <div class="figure-caption"><strong>Temporal Comparison 2015-2023</strong><br>8-year trends in access patterns</div>
+                </div>
+            </div>
+
+            <!-- Provincial/Territorial Maps -->
+            <h3 style="color: var(--aqua-dark); margin-top: 3rem; margin-bottom: 1.5rem;">🍁 Provincial & Territorial Maps</h3>
+            <div class="figure-grid">
+                <div class="figure-single">
+                    <img src="maps_nov2025/static_map_province_NL.png" alt="Newfoundland & Labrador" onclick="openModal(this.src)" style="cursor: pointer;">
+                    <div class="figure-caption"><strong>Newfoundland & Labrador</strong><br>Most isolated province (1,400+ km average)</div>
+                </div>
+                <div class="figure-single">
+                    <img src="maps_nov2025/static_map_province_NS.png" alt="Nova Scotia" onclick="openModal(this.src)" style="cursor: pointer;">
+                    <div class="figure-caption"><strong>Nova Scotia</strong><br>Only Atlantic DBS center (Halifax)</div>
+                </div>
+                <div class="figure-single">
+                    <img src="maps_nov2025/static_map_province_PE.png" alt="Prince Edward Island" onclick="openModal(this.src)" style="cursor: pointer;">
+                    <div class="figure-caption"><strong>Prince Edward Island</strong><br>Small population, moderate travel burden</div>
+                </div>
+                <div class="figure-single">
+                    <img src="maps_nov2025/static_map_province_NB.png" alt="New Brunswick" onclick="openModal(this.src)" style="cursor: pointer;">
+                    <div class="figure-caption"><strong>New Brunswick</strong><br>Atlantic isolation challenges</div>
+                </div>
+                <div class="figure-single">
+                    <img src="maps_nov2025/static_map_province_QC.png" alt="Quebec" onclick="openModal(this.src)" style="cursor: pointer;">
+                    <div class="figure-caption"><strong>Quebec</strong><br>3 DBS centers (Montreal, Quebec City, Sherbrooke)</div>
+                </div>
+                <div class="figure-single">
+                    <img src="maps_nov2025/static_map_province_ON.png" alt="Ontario" onclick="openModal(this.src)" style="cursor: pointer;">
+                    <div class="figure-caption"><strong>Ontario</strong><br>2 DBS centers (Toronto, London)</div>
+                </div>
+                <div class="figure-single">
+                    <img src="maps_nov2025/static_map_province_MB.png" alt="Manitoba" onclick="openModal(this.src)" style="cursor: pointer;">
+                    <div class="figure-caption"><strong>Manitoba</strong><br>Prairie gap - no DBS center</div>
+                </div>
+                <div class="figure-single">
+                    <img src="maps_nov2025/static_map_province_SK.png" alt="Saskatchewan" onclick="openModal(this.src)" style="cursor: pointer;">
+                    <div class="figure-caption"><strong>Saskatchewan</strong><br>DBS center in Saskatoon</div>
+                </div>
+                <div class="figure-single">
+                    <img src="maps_nov2025/static_map_province_AB.png" alt="Alberta" onclick="openModal(this.src)" style="cursor: pointer;">
+                    <div class="figure-caption"><strong>Alberta</strong><br>2 DBS centers (Calgary, Edmonton)</div>
+                </div>
+                <div class="figure-single">
+                    <img src="maps_nov2025/static_map_province_BC.png" alt="British Columbia" onclick="openModal(this.src)" style="cursor: pointer;">
+                    <div class="figure-caption"><strong>British Columbia</strong><br>Western access patterns</div>
+                </div>
+                <div class="figure-single">
+                    <img src="maps_nov2025/static_map_province_NT.png" alt="Northwest Territories" onclick="openModal(this.src)" style="cursor: pointer;">
+                    <div class="figure-caption"><strong>Northwest Territories</strong><br>Northern isolation (2,000+ km)</div>
+                </div>
+                <div class="figure-single">
+                    <img src="maps_nov2025/static_map_province_NU.png" alt="Nunavut" onclick="openModal(this.src)" style="cursor: pointer;">
+                    <div class="figure-caption"><strong>Nunavut</strong><br>Most isolated territory</div>
+                </div>
+            </div>
+
+            <!-- Download Info Box -->
+            <div style="background: var(--aqua-light); padding: 1.5rem; border-radius: 8px; margin-top: 2rem; border-left: 4px solid var(--aqua-dark);">
+                <p style="margin: 0; color: var(--dark-gray);">
+                    <strong>📥 Publication Quality:</strong> All maps are 300 DPI resolution, suitable for academic journals, policy briefs, and presentations.
+                    <a href="maps_nov2025/" target="_blank" style="color: var(--aqua-dark); font-weight: 600;">View all maps in folder →</a>
+                </p>
+            </div>
         </section>
     </div>
 
