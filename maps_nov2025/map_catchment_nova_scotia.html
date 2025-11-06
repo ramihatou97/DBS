@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nova Scotia - DBS Catchment</title>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBH_yuU7_TfAJmuf_h04UsmKKhC0XPWerA"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: #f8fafc; overflow: hidden; }
+        #map { width: 100%; height: 100vh; }
+
+        .info-panel {
+            position: absolute; top: 16px; left: 16px; background: rgba(255, 255, 255, 0.97);
+            padding: 16px 20px; border-radius: 10px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            max-width: 280px; z-index: 1000; border: 1px solid #e2e8f0;
+        }
+
+        .info-title {
+            font-size: 15px; font-weight: 600; color: #1e293b; margin-bottom: 8px;
+            letter-spacing: -0.02em;
+        }
+
+        .info-stat {
+            font-size: 11px; color: #64748b; line-height: 1.6;
+        }
+
+        .stat-value {
+            font-weight: 600; color: #3b82f6;
+        }
+    </style>
+</head>
+<body>
+    <div class="info-panel">
+        <div class="info-title">Nova Scotia DBS Catchment</div>
+        <div class="info-stat">
+            <span class="stat-value">44 patients</span> traveled to 1 DBS center in this province/region.
+        </div>
+    </div>
+
+    <div id="map"></div>
+
+    <script>
+        const flowsData = [{"from_lat": 47.55702184810682, "from_lng": -52.68383683394982, "to_lat": 44.6488, "to_lng": -63.5752, "distance": 1485.4, "fsa": "A1C", "center": "Halifax", "color": "#3b82f6", "weight": 2.0, "opacity": 0.7}, {"from_lat": 47.62930754382726, "from_lng": -52.8019590743836, "to_lat": 44.6488, "to_lng": -63.5752, "distance": 1483.7, "fsa": "A1M", "center": "Halifax", "color": "#3b82f6", "weight": 2.0, "opacity": 0.7}, {"from_lat": 45.97311903238347, "from_lng": -61.07658757881551, "to_lat": 44.6488, "to_lng": -63.5752, "distance": 315.8, "fsa": "B0E", "center": "Halifax", "color": "#3b82f6", "weight": 2.0, "opacity": 0.7}, {"from_lat": 45.96511890492661, "from_lng": -61.11198866846095, "to_lat": 44.6488, "to_lng": -63.5752, "distance": 315.8, "fsa": "B0E", "center": "Halifax", "color": "#3b82f6", "weight": 2.0, "opacity": 0.7}, {"from_lat": 44.57406300867411, "from_lng": -63.841291900281284, "to_lat": 44.6488, "to_lng": -63.5752, "distance": 50.7, "fsa": "B0J", "center": "Halifax", "color": "#3b82f6", "weight": 1.0, "opacity": 0.35}, {"from_lat": 45.616852383799845, "from_lng": -62.89694743360838, "to_lat": 44.6488, "to_lng": -63.5752, "distance": 151.0, "fsa": "B0K", "center": "Halifax", "color": "#3b82f6", "weight": 1.2, "opacity": 0.45}, {"from_lat": 45.51299362529517, "from_lng": -63.8479134806899, "to_lat": 44.6488, "to_lng": -63.5752, "distance": 173.8, "fsa": "B0M", "center": "Halifax", "color": "#3b82f6", "weight": 1.2, "opacity": 0.45}, {"from_lat": 45.06351037805194, "from_lng": -64.70133404223168, "to_lat": 44.6488, "to_lng": -63.5752, "distance": 117.4, "fsa": "B0P", "center": "Halifax", "color": "#3b82f6", "weight": 1.2, "opacity": 0.45}, {"from_lat": 44.499507073261775, "from_lng": -64.62483717269485, "to_lat": 44.6488, "to_lng": -63.5752, "distance": 107.9, "fsa": "B0R", "center": "Halifax", "color": "#3b82f6", "weight": 1.2, "opacity": 0.45}, {"from_lat": 44.82092021623101, "from_lng": -65.34862116733741, "to_lat": 44.6488, "to_lng": -63.5752, "distance": 180.0, "fsa": "B0S", "center": "Halifax", "color": "#3b82f6", "weight": 1.2, "opacity": 0.45}, {"from_lat": 46.211827492545495, "from_lng": -60.08316460361769, "to_lat": 44.6488, "to_lng": -63.5752, "distance": 422.8, "fsa": "B1H", "center": "Halifax", "color": "#3b82f6", "weight": 2.0, "opacity": 0.7}, {"from_lat": 46.13974173934477, "from_lng": -60.19116739348526, "to_lat": 44.6488, "to_lng": -63.5752, "distance": 396.6, "fsa": "B1S", "center": "Halifax", "color": "#3b82f6", "weight": 2.0, "opacity": 0.7}, {"from_lat": 46.24490301827971, "from_lng": -60.45389667272798, "to_lat": 44.6488, "to_lng": -63.5752, "distance": 384.9, "fsa": "B1X", "center": "Halifax", "color": "#3b82f6", "weight": 2.0, "opacity": 0.7}, {"from_lat": 45.60910544190396, "from_lng": -62.024808243769314, "to_lat": 44.6488, "to_lng": -63.5752, "distance": 213.3, "fsa": "B2G", "center": "Halifax", "color": "#3b82f6", "weight": 1.5, "opacity": 0.55}, {"from_lat": 44.654456089828614, "from_lng": -63.55666064393676, "to_lat": 44.6488, "to_lng": -63.5752, "distance": 11.1, "fsa": "B2W", "center": "Halifax", "color": "#3b82f6", "weight": 1.0, "opacity": 0.35}, {"from_lat": 44.654550862387396, "from_lng": -63.54407166379573, "to_lat": 44.6488, "to_lng": -63.5752, "distance": 11.1, "fsa": "B2W", "center": "Halifax", "color": "#3b82f6", "weight": 1.0, "opacity": 0.35}, {"from_lat": 44.66180112637376, "from_lng": -63.4677583626178, "to_lat": 44.6488, "to_lng": -63.5752, "distance": 11.1, "fsa": "B2W", "center": "Halifax", "color": "#3b82f6", "weight": 1.0, "opacity": 0.35}, {"from_lat": 44.675031977694125, "from_lng": -63.470371219046356, "to_lat": 44.6488, "to_lng": -63.5752, "distance": 11.1, "fsa": "B2W", "center": "Halifax", "color": "#3b82f6", "weight": 1.0, "opacity": 0.35}, {"from_lat": 44.63331207346356, "from_lng": -63.57398513499802, "to_lat": 44.6488, "to_lng": -63.5752, "distance": 1.4, "fsa": "B3H", "center": "Halifax", "color": "#3b82f6", "weight": 1.0, "opacity": 0.35}, {"from_lat": 44.64697673000305, "from_lng": -63.58767963700602, "to_lat": 44.6488, "to_lng": -63.5752, "distance": 2.4, "fsa": "B3K", "center": "Halifax", "color": "#3b82f6", "weight": 1.0, "opacity": 0.35}, {"from_lat": 44.65113766540896, "from_lng": -63.61612174799979, "to_lat": 44.6488, "to_lng": -63.5752, "distance": 4.6, "fsa": "B3N", "center": "Halifax", "color": "#3b82f6", "weight": 1.0, "opacity": 0.35}, {"from_lat": 44.63707926700404, "from_lng": -63.69888475150229, "to_lat": 44.6488, "to_lng": -63.5752, "distance": 9.6, "fsa": "B3S", "center": "Halifax", "color": "#3b82f6", "weight": 1.0, "opacity": 0.35}, {"from_lat": 44.65594773767764, "from_lng": -63.823041373839516, "to_lat": 44.6488, "to_lng": -63.5752, "distance": 31.3, "fsa": "B3Z", "center": "Halifax", "color": "#3b82f6", "weight": 1.0, "opacity": 0.35}, {"from_lat": 44.71272932971252, "from_lng": -63.680766454377924, "to_lat": 44.6488, "to_lng": -63.5752, "distance": 13.3, "fsa": "B4A", "center": "Halifax", "color": "#3b82f6", "weight": 1.0, "opacity": 0.35}, {"from_lat": 44.793047708434955, "from_lng": -63.72370688545439, "to_lat": 44.6488, "to_lng": -63.5752, "distance": 26.9, "fsa": "B4E", "center": "Halifax", "color": "#3b82f6", "weight": 1.0, "opacity": 0.35}, {"from_lat": 45.087548134079114, "from_lng": -64.48741873590446, "to_lat": 44.6488, "to_lng": -63.5752, "distance": 103.2, "fsa": "B4N", "center": "Halifax", "color": "#3b82f6", "weight": 1.2, "opacity": 0.45}, {"from_lat": 45.05543489697221, "from_lng": -64.40448161320657, "to_lat": 44.6488, "to_lng": -63.5752, "distance": 91.8, "fsa": "B4P", "center": "Halifax", "color": "#3b82f6", "weight": 1.0, "opacity": 0.35}, {"from_lat": 43.88156842553536, "from_lng": -66.1255978203692, "to_lat": 44.6488, "to_lng": -63.5752, "distance": 303.1, "fsa": "B5A", "center": "Halifax", "color": "#3b82f6", "weight": 2.0, "opacity": 0.7}, {"from_lat": 46.26032264859486, "from_lng": -62.90990369918462, "to_lat": 44.6488, "to_lng": -63.5752, "distance": 240.7, "fsa": "C0A", "center": "Halifax", "color": "#3b82f6", "weight": 1.5, "opacity": 0.55}, {"from_lat": 46.56194070243195, "from_lng": -63.95348232371199, "to_lat": 44.6488, "to_lng": -63.5752, "distance": 327.5, "fsa": "C0B", "center": "Halifax", "color": "#3b82f6", "weight": 2.0, "opacity": 0.7}, {"from_lat": 46.59560636878283, "from_lng": -63.90144697955787, "to_lat": 44.6488, "to_lng": -63.5752, "distance": 327.5, "fsa": "C0B", "center": "Halifax", "color": "#3b82f6", "weight": 2.0, "opacity": 0.7}, {"from_lat": 46.230768564294216, "from_lng": -63.15469838334245, "to_lat": 44.6488, "to_lng": -63.5752, "distance": 327.7, "fsa": "C1A", "center": "Halifax", "color": "#3b82f6", "weight": 2.0, "opacity": 0.7}, {"from_lat": 46.224440212452095, "from_lng": -63.14030373290638, "to_lat": 44.6488, "to_lng": -63.5752, "distance": 327.7, "fsa": "C1A", "center": "Halifax", "color": "#3b82f6", "weight": 2.0, "opacity": 0.7}, {"from_lat": 46.3209271293404, "from_lng": -63.1985422854225, "to_lat": 44.6488, "to_lng": -63.5752, "distance": 320.6, "fsa": "C1E", "center": "Halifax", "color": "#3b82f6", "weight": 2.0, "opacity": 0.7}, {"from_lat": 46.43170137039673, "from_lng": -63.79045836200254, "to_lat": 44.6488, "to_lng": -63.5752, "distance": 295.1, "fsa": "C1N", "center": "Halifax", "color": "#3b82f6", "weight": 1.5, "opacity": 0.55}, {"from_lat": 46.42226728929924, "from_lng": -63.75412104313061, "to_lat": 44.6488, "to_lng": -63.5752, "distance": 295.1, "fsa": "C1N", "center": "Halifax", "color": "#3b82f6", "weight": 1.5, "opacity": 0.55}, {"from_lat": 45.4028597843255, "from_lng": -65.99885051459901, "to_lat": 44.6488, "to_lng": -63.5752, "distance": 399.3, "fsa": "E2E", "center": "Halifax", "color": "#3b82f6", "weight": 2.0, "opacity": 0.7}, {"from_lat": 45.39044328501548, "from_lng": -65.97192222213164, "to_lat": 44.6488, "to_lng": -63.5752, "distance": 399.3, "fsa": "E2E", "center": "Halifax", "color": "#3b82f6", "weight": 2.0, "opacity": 0.7}, {"from_lat": 45.26414519201073, "from_lng": -66.11322245680294, "to_lat": 44.6488, "to_lng": -63.5752, "distance": 417.9, "fsa": "E2M", "center": "Halifax", "color": "#3b82f6", "weight": 2.0, "opacity": 0.7}, {"from_lat": 45.24950036004438, "from_lng": -66.0944603804866, "to_lat": 44.6488, "to_lng": -63.5752, "distance": 417.9, "fsa": "E2M", "center": "Halifax", "color": "#3b82f6", "weight": 2.0, "opacity": 0.7}, {"from_lat": 45.95338146750228, "from_lng": -66.57394658362968, "to_lat": 44.6488, "to_lng": -63.5752, "distance": 430.0, "fsa": "E3A", "center": "Halifax", "color": "#3b82f6", "weight": 2.0, "opacity": 0.7}, {"from_lat": 46.64148563032925, "from_lng": -64.87768231001581, "to_lat": 44.6488, "to_lng": -63.5752, "distance": 320.6, "fsa": "E4W", "center": "Halifax", "color": "#3b82f6", "weight": 2.0, "opacity": 0.7}, {"from_lat": 46.423034402979624, "from_lng": -67.55398244077813, "to_lat": 44.6488, "to_lng": -63.5752, "distance": 577.5, "fsa": "E7L", "center": "Halifax", "color": "#3b82f6", "weight": 2.0, "opacity": 0.7}, {"from_lat": 46.182068201167, "from_lng": -67.65500379640396, "to_lat": 44.6488, "to_lng": -63.5752, "distance": 530.5, "fsa": "E7M", "center": "Halifax", "color": "#3b82f6", "weight": 2.0, "opacity": 0.7}];
+        const centers = [{"lat": 44.6488, "lon": -63.5752, "province": "Nova Scotia", "site_ids": [12.0]}];
+
+        function initMap() {
+            const map = new google.maps.Map(document.getElementById('map'), {
+                center: { lat: 45.0, lng: -63.0 },
+                zoom: 6.5,
+                mapTypeId: 'terrain',
+                styles: [
+                    { featureType: 'administrative.province', elementType: 'geometry.stroke',
+                       stylers: [{ color: '#1e293b' }, { weight: 2.5 }] },
+                    { featureType: 'water', elementType: 'geometry', stylers: [{ color: '#dbeafe' }] },
+                    { featureType: 'landscape', elementType: 'geometry', stylers: [{ color: '#f8fafc' }] },
+                    { featureType: 'poi', stylers: [{ visibility: 'off' }] },
+                    { featureType: 'road', elementType: 'labels', stylers: [{ visibility: 'off' }] }
+                ],
+                zoomControl: true,
+                mapTypeControl: false,
+                streetViewControl: false,
+                fullscreenControl: true
+            });
+
+            // Add DBS centers
+            centers.forEach(center => {
+                new google.maps.Marker({
+                    position: { lat: center.lat, lng: center.lon },
+                    map: map,
+                    icon: {
+                        path: google.maps.SymbolPath.CIRCLE,
+                        scale: 8,
+                        fillColor: '#3b82f6',
+                        fillOpacity: 1,
+                        strokeColor: 'white',
+                        strokeWeight: 3
+                    },
+                    title: 'DBS Center',
+                    zIndex: 1000
+                });
+            });
+
+            // Draw patient flows
+            flowsData.forEach(flow => {
+                const arrowScale = flow.distance > 300 ? 4.0 : 3.0;
+
+                const lineSymbol = {
+                    path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
+                    scale: arrowScale,
+                    strokeColor: flow.color,
+                    fillColor: flow.color,
+                    fillOpacity: 1
+                };
+
+                new google.maps.Polyline({
+                    path: [
+                        { lat: flow.from_lat, lng: flow.from_lng },
+                        { lat: flow.to_lat, lng: flow.to_lng }
+                    ],
+                    geodesic: true,
+                    strokeColor: flow.color,
+                    strokeOpacity: flow.opacity,
+                    strokeWeight: flow.weight,
+                    icons: [{
+                        icon: lineSymbol,
+                        offset: '65%'
+                    }],
+                    map: map
+                });
+
+                // Patient origin marker
+                new google.maps.Marker({
+                    position: { lat: flow.from_lat, lng: flow.from_lng },
+                    map: map,
+                    icon: {
+                        path: google.maps.SymbolPath.CIRCLE,
+                        scale: 2.5,
+                        fillColor: flow.color,
+                        fillOpacity: 0.7,
+                        strokeColor: 'white',
+                        strokeWeight: 0.5
+                    },
+                    zIndex: 10
+                });
+            });
+        }
+
+        window.onload = initMap;
+    </script>
+</body>
+</html>

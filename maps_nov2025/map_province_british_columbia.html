@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>British Columbia</title>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBH_yuU7_TfAJmuf_h04UsmKKhC0XPWerA"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: #f8fafc; overflow: hidden; }
+        #map { width: 100%; height: 100vh; }
+
+        .info-panel {
+            position: absolute; top: 16px; left: 16px; background: rgba(255, 255, 255, 0.97);
+            padding: 16px 20px; border-radius: 10px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            max-width: 320px; z-index: 1000; border: 1px solid #e2e8f0;
+            border-left: 4px solid #06b6d4;
+        }
+
+        .info-title {
+            font-size: 15px; font-weight: 600; color: #1e293b; margin-bottom: 6px;
+            letter-spacing: -0.02em;
+        }
+
+        .info-subtitle {
+            font-size: 12px; color: #64748b; margin-bottom: 8px; font-weight: 500;
+        }
+
+        .info-description {
+            font-size: 11px; color: #64748b; line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <div class="info-panel">
+        <div class="info-title">British Columbia</div>
+        <div class="info-subtitle">Catchment Area: 30 patients</div>
+        <div class="info-description">Vancouver DBS Center</div>
+    </div>
+
+    <div id="map"></div>
+
+    <script>
+        const flowsData = [{"from_lat": 49.780160906632645, "from_lng": -97.14724151299639, "to_lat": 49.2827, "to_lng": -123.1207, "distance": 786.3, "fsa": "R3T", "center": "Vancouver", "color": "#06b6d4", "weight": 1.8, "opacity": 0.6}, {"from_lat": 51.34412279523533, "from_lng": -102.8172163803283, "to_lat": 49.2827, "to_lng": -123.1207, "distance": 295.9, "fsa": "S0A", "center": "Vancouver", "color": "#06b6d4", "weight": 1.3, "opacity": 0.5}, {"from_lat": 53.03075475817289, "from_lng": -103.77009349206739, "to_lat": 49.2827, "to_lng": -123.1207, "distance": 256.5, "fsa": "S0E", "center": "Vancouver", "color": "#06b6d4", "weight": 1.3, "opacity": 0.5}, {"from_lat": 54.251982524741514, "from_lng": -105.85738051887493, "to_lat": 49.2827, "to_lng": -123.1207, "distance": 269.9, "fsa": "S0J", "center": "Vancouver", "color": "#06b6d4", "weight": 1.3, "opacity": 0.5}, {"from_lat": 52.321143262581266, "from_lng": -106.44122262980696, "to_lat": 49.2827, "to_lng": -123.1207, "distance": 32.7, "fsa": "S0K", "center": "Vancouver", "color": "#06b6d4", "weight": 1.0, "opacity": 0.4}, {"from_lat": 52.31662957362095, "from_lng": -106.42020545384413, "to_lat": 49.2827, "to_lng": -123.1207, "distance": 32.7, "fsa": "S0K", "center": "Vancouver", "color": "#06b6d4", "weight": 1.0, "opacity": 0.4}, {"from_lat": 51.54786685517981, "from_lng": -108.32438068951477, "to_lat": 49.2827, "to_lng": -123.1207, "distance": 158.8, "fsa": "S0L", "center": "Vancouver", "color": "#06b6d4", "weight": 1.3, "opacity": 0.5}, {"from_lat": 49.98111120881807, "from_lng": -108.69543310608809, "to_lat": 49.2827, "to_lng": -123.1207, "distance": 349.8, "fsa": "S0N", "center": "Vancouver", "color": "#06b6d4", "weight": 1.8, "opacity": 0.6}, {"from_lat": 49.98832734730223, "from_lng": -108.68067796488873, "to_lat": 49.2827, "to_lng": -123.1207, "distance": 349.8, "fsa": "S0N", "center": "Vancouver", "color": "#06b6d4", "weight": 1.8, "opacity": 0.6}, {"from_lat": 55.052271045384494, "from_lng": -102.5639765482265, "to_lat": 49.2827, "to_lng": -123.1207, "distance": 152.7, "fsa": "S0P", "center": "Vancouver", "color": "#06b6d4", "weight": 1.3, "opacity": 0.5}, {"from_lat": 50.400505859919896, "from_lng": -104.62551532169076, "to_lat": 49.2827, "to_lng": -123.1207, "distance": 270.9, "fsa": "S4S", "center": "Vancouver", "color": "#06b6d4", "weight": 1.3, "opacity": 0.5}, {"from_lat": 50.43559105974074, "from_lng": -104.52336101948758, "to_lat": 49.2827, "to_lng": -123.1207, "distance": 262.9, "fsa": "S4V", "center": "Vancouver", "color": "#06b6d4", "weight": 1.3, "opacity": 0.5}, {"from_lat": 53.19189102532578, "from_lng": -105.7027845929583, "to_lat": 49.2827, "to_lng": -123.1207, "distance": 143.3, "fsa": "S6V", "center": "Vancouver", "color": "#06b6d4", "weight": 1.3, "opacity": 0.5}, {"from_lat": 52.11744372109843, "from_lng": -106.63712635953185, "to_lat": 49.2827, "to_lng": -123.1207, "distance": 4.8, "fsa": "S7H", "center": "Vancouver", "color": "#06b6d4", "weight": 1.0, "opacity": 0.4}, {"from_lat": 52.09426234518941, "from_lng": -106.65842205211153, "to_lat": 49.2827, "to_lng": -123.1207, "distance": 5.6, "fsa": "S7J", "center": "Vancouver", "color": "#06b6d4", "weight": 1.0, "opacity": 0.4}, {"from_lat": 52.085762699013806, "from_lng": -106.65082514075563, "to_lat": 49.2827, "to_lng": -123.1207, "distance": 5.6, "fsa": "S7J", "center": "Vancouver", "color": "#06b6d4", "weight": 1.0, "opacity": 0.4}, {"from_lat": 52.12500195185902, "from_lng": -106.5818796997207, "to_lat": 49.2827, "to_lng": -123.1207, "distance": 5.6, "fsa": "S7J", "center": "Vancouver", "color": "#06b6d4", "weight": 1.0, "opacity": 0.4}, {"from_lat": 52.16287148420539, "from_lng": -106.63318682469284, "to_lat": 49.2827, "to_lng": -123.1207, "distance": 3.8, "fsa": "S7K", "center": "Vancouver", "color": "#06b6d4", "weight": 1.0, "opacity": 0.4}, {"from_lat": 52.11769152312541, "from_lng": -106.740482874734, "to_lat": 49.2827, "to_lng": -123.1207, "distance": 7.7, "fsa": "S7L", "center": "Vancouver", "color": "#06b6d4", "weight": 1.0, "opacity": 0.4}, {"from_lat": 52.1613928111333, "from_lng": -106.68747885976106, "to_lat": 49.2827, "to_lng": -123.1207, "distance": 7.7, "fsa": "S7L", "center": "Vancouver", "color": "#06b6d4", "weight": 1.0, "opacity": 0.4}, {"from_lat": 52.13853060447439, "from_lng": -106.68293655402158, "to_lat": 49.2827, "to_lng": -123.1207, "distance": 7.7, "fsa": "S7L", "center": "Vancouver", "color": "#06b6d4", "weight": 1.0, "opacity": 0.4}, {"from_lat": 52.14288093985766, "from_lng": -106.67723371891066, "to_lat": 49.2827, "to_lng": -123.1207, "distance": 7.3, "fsa": "S7M", "center": "Vancouver", "color": "#06b6d4", "weight": 1.0, "opacity": 0.4}, {"from_lat": 52.09582517265514, "from_lng": -106.584127202139, "to_lat": 49.2827, "to_lng": -123.1207, "distance": 10.6, "fsa": "S7T", "center": "Vancouver", "color": "#06b6d4", "weight": 1.0, "opacity": 0.4}, {"from_lat": 52.099365157299275, "from_lng": -106.58337190831716, "to_lat": 49.2827, "to_lng": -123.1207, "distance": 8.7, "fsa": "S7V", "center": "Vancouver", "color": "#06b6d4", "weight": 1.0, "opacity": 0.4}, {"from_lat": 52.075200505530326, "from_lng": -106.53309181745988, "to_lat": 49.2827, "to_lng": -123.1207, "distance": 8.7, "fsa": "S7V", "center": "Vancouver", "color": "#06b6d4", "weight": 1.0, "opacity": 0.4}, {"from_lat": 52.08997298859422, "from_lng": -106.56254206060709, "to_lat": 49.2827, "to_lng": -123.1207, "distance": 8.7, "fsa": "S7V", "center": "Vancouver", "color": "#06b6d4", "weight": 1.0, "opacity": 0.4}, {"from_lat": 52.16281025968204, "from_lng": -106.52921658651836, "to_lat": 49.2827, "to_lng": -123.1207, "distance": 10.3, "fsa": "S7W", "center": "Vancouver", "color": "#06b6d4", "weight": 1.0, "opacity": 0.4}, {"from_lat": 52.79228947475789, "from_lng": -108.26700136258395, "to_lat": 49.2827, "to_lng": -123.1207, "distance": 141.0, "fsa": "S9A", "center": "Vancouver", "color": "#06b6d4", "weight": 1.3, "opacity": 0.5}, {"from_lat": 53.25486610316909, "from_lng": -110.0000441325275, "to_lat": 49.2827, "to_lng": -123.1207, "distance": 279.2, "fsa": "T9V", "center": "Vancouver", "color": "#06b6d4", "weight": 1.3, "opacity": 0.5}, {"from_lat": 50.014562408815245, "from_lng": -110.6706385725467, "to_lat": 49.2827, "to_lng": -123.1207, "distance": 449.2, "fsa": "T1A", "center": "Vancouver", "color": "#06b6d4", "weight": 1.8, "opacity": 0.6}];
+        const centers = [{"name": "Vancouver", "lat": 49.2827, "lon": -123.1207}, {"name": "Vancouver", "lat": 49.2827, "lon": -123.1207}, {"name": "Vancouver", "lat": 49.2827, "lon": -123.1207}, {"name": "Vancouver", "lat": 49.2827, "lon": -123.1207}, {"name": "Vancouver", "lat": 49.2827, "lon": -123.1207}, {"name": "Vancouver", "lat": 49.2827, "lon": -123.1207}, {"name": "Vancouver", "lat": 49.2827, "lon": -123.1207}, {"name": "Vancouver", "lat": 49.2827, "lon": -123.1207}, {"name": "Vancouver", "lat": 49.2827, "lon": -123.1207}, {"name": "Vancouver", "lat": 49.2827, "lon": -123.1207}, {"name": "Vancouver", "lat": 49.2827, "lon": -123.1207}, {"name": "Vancouver", "lat": 49.2827, "lon": -123.1207}, {"name": "Vancouver", "lat": 49.2827, "lon": -123.1207}, {"name": "Vancouver", "lat": 49.2827, "lon": -123.1207}, {"name": "Vancouver", "lat": 49.2827, "lon": -123.1207}, {"name": "Vancouver", "lat": 49.2827, "lon": -123.1207}, {"name": "Vancouver", "lat": 49.2827, "lon": -123.1207}, {"name": "Vancouver", "lat": 49.2827, "lon": -123.1207}, {"name": "Vancouver", "lat": 49.2827, "lon": -123.1207}, {"name": "Vancouver", "lat": 49.2827, "lon": -123.1207}, {"name": "Vancouver", "lat": 49.2827, "lon": -123.1207}, {"name": "Vancouver", "lat": 49.2827, "lon": -123.1207}, {"name": "Vancouver", "lat": 49.2827, "lon": -123.1207}, {"name": "Vancouver", "lat": 49.2827, "lon": -123.1207}, {"name": "Vancouver", "lat": 49.2827, "lon": -123.1207}, {"name": "Vancouver", "lat": 49.2827, "lon": -123.1207}, {"name": "Vancouver", "lat": 49.2827, "lon": -123.1207}, {"name": "Vancouver", "lat": 49.2827, "lon": -123.1207}, {"name": "Vancouver", "lat": 49.2827, "lon": -123.1207}, {"name": "Vancouver", "lat": 49.2827, "lon": -123.1207}];
+
+        function initMap() {
+            const map = new google.maps.Map(document.getElementById('map'), {
+                center: { lat: 54.0, lng: -125.0 },
+                zoom: 5.2,
+                mapTypeId: 'terrain',
+                styles: [
+                    { featureType: 'administrative.province', elementType: 'geometry.stroke',
+                       stylers: [{ color: '#1e293b' }, { weight: 2.5 }] },
+                    { featureType: 'water', elementType: 'geometry', stylers: [{ color: '#dbeafe' }] },
+                    { featureType: 'landscape', elementType: 'geometry', stylers: [{ color: '#f8fafc' }] },
+                    { featureType: 'poi', stylers: [{ visibility: 'off' }] },
+                    { featureType: 'road', elementType: 'labels', stylers: [{ visibility: 'off' }] }
+                ],
+                zoomControl: true,
+                mapTypeControl: false,
+                streetViewControl: false,
+                fullscreenControl: true
+            });
+
+            // Add DBS centers
+            centers.forEach(center => {
+                new google.maps.Marker({
+                    position: { lat: center.lat, lng: center.lon },
+                    map: map,
+                    icon: {
+                        path: google.maps.SymbolPath.CIRCLE,
+                        scale: 8,
+                        fillColor: '#06b6d4',
+                        fillOpacity: 1,
+                        strokeColor: 'white',
+                        strokeWeight: 3
+                    },
+                    title: center.name,
+                    zIndex: 1000
+                });
+            });
+
+            // Draw patient flows
+            flowsData.forEach(flow => {
+                const arrowScale = flow.distance > 1000 ? 4.5 : (flow.distance > 500 ? 4.0 : 3.5);
+
+                const lineSymbol = {
+                    path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
+                    scale: arrowScale,
+                    strokeColor: flow.color,
+                    fillColor: flow.color,
+                    fillOpacity: 1
+                };
+
+                new google.maps.Polyline({
+                    path: [
+                        { lat: flow.from_lat, lng: flow.from_lng },
+                        { lat: flow.to_lat, lng: flow.to_lng }
+                    ],
+                    geodesic: true,
+                    strokeColor: flow.color,
+                    strokeOpacity: flow.opacity,
+                    strokeWeight: flow.weight,
+                    icons: [{
+                        icon: lineSymbol,
+                        offset: '65%'
+                    }],
+                    map: map
+                });
+
+                // Patient origin marker
+                new google.maps.Marker({
+                    position: { lat: flow.from_lat, lng: flow.from_lng },
+                    map: map,
+                    icon: {
+                        path: google.maps.SymbolPath.CIRCLE,
+                        scale: 2.5,
+                        fillColor: flow.color,
+                        fillOpacity: 0.7,
+                        strokeColor: 'white',
+                        strokeWeight: 0.5
+                    },
+                    zIndex: 10
+                });
+            });
+        }
+
+        window.onload = initMap;
+    </script>
+</body>
+</html>

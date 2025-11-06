@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DBS Access Dashboard - Canada</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #F7FAFC;
+            color: #2D3748;
+            overflow: hidden;
+        }
+
+        #header {
+            background: linear-gradient(135deg, #2C7A7B 0%, #38B2AC 100%);
+            padding: 20px 32px;
+            border-bottom: 1px solid #1A5558;
+        }
+
+        h1 {
+            font-size: 22px;
+            font-weight: 600;
+            color: #FFFFFF;
+            margin-bottom: 8px;
+            letter-spacing: -0.02em;
+        }
+
+        .subtitle {
+            font-size: 13px;
+            color: #B2F5EA;
+            font-weight: 400;
+            line-height: 1.5;
+        }
+
+        #nav-tabs {
+            background: white;
+            display: flex;
+            overflow-x: auto;
+            border-bottom: 1px solid #CBD5E0;
+            padding: 0 16px;
+        }
+
+        .tab {
+            padding: 14px 20px;
+            cursor: pointer;
+            border: none;
+            background: transparent;
+            color: #4A5568;
+            font-size: 13px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            border-bottom: 2px solid transparent;
+            white-space: nowrap;
+        }
+
+        .tab:hover {
+            color: #2D3748;
+            background: #B2F5EA;
+        }
+
+        .tab.active {
+            color: #1A1A1A;
+            border-bottom-color: #38B2AC;
+            font-weight: 600;
+        }
+
+        #map-container {
+            height: calc(100vh - 138px);
+            background: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: block;
+        }
+
+        /* Scrollbar styling */
+        #nav-tabs::-webkit-scrollbar {
+            height: 4px;
+        }
+
+        #nav-tabs::-webkit-scrollbar-track {
+            background: #E2E8F0;
+        }
+
+        #nav-tabs::-webkit-scrollbar-thumb {
+            background: #38B2AC;
+            border-radius: 2px;
+        }
+
+        #nav-tabs::-webkit-scrollbar-thumb:hover {
+            background: #2C7A7B;
+        }
+    </style>
+</head>
+<body>
+    <div id="header">
+        <h1>DBS Access Crisis: A Geographic Equity Analysis</h1>
+        <div class="subtitle">
+            <strong>19% face >200km travel burden</strong> • Indigenous burden 2.3× higher • 936 patients across 513 communities • 2019-2023
+        </div>
+    </div>
+
+    <div id="nav-tabs">
+        <button class="tab active" onclick="showMap('map1')">19% Face Extreme Distance</button>
+        <button class="tab" onclick="showMap('map3')">Indigenous Crisis: 40% >300km</button>
+        <button class="tab" onclick="showMap('map_atlantic')">Atlantic Crisis: 3.69× Burden</button>
+        <button class="tab" onclick="showMap('map5')">Patient Migration Patterns</button>
+        <button class="tab" onclick="showMap('map_journeys')">Individual Patient Journeys</button>
+        <button class="tab" onclick="showMap('map12')">What Drives Disparities?</button>
+        <button class="tab" onclick="showMap('map_nl')">📍 Newfoundland & Labrador</button>
+        <button class="tab" onclick="showMap('map_ns')">📍 Nova Scotia</button>
+        <button class="tab" onclick="showMap('map_pe')">📍 Prince Edward Island</button>
+        <button class="tab" onclick="showMap('map_nb')">📍 New Brunswick</button>
+        <button class="tab" onclick="showMap('map_qc')">📍 Quebec</button>
+        <button class="tab" onclick="showMap('map_on')">📍 Ontario</button>
+        <button class="tab" onclick="showMap('map_mb')">📍 Manitoba</button>
+        <button class="tab" onclick="showMap('map_sk')">📍 Saskatchewan</button>
+        <button class="tab" onclick="showMap('map_ab')">📍 Alberta</button>
+        <button class="tab" onclick="showMap('map_bc')">📍 British Columbia</button>
+        <button class="tab" onclick="showMap('map_yt')">📍 Yukon</button>
+        <button class="tab" onclick="showMap('map_nt')">📍 Northwest Territories</button>
+        <button class="tab" onclick="showMap('map_nu')">📍 Nunavut</button>
+        <button class="tab" onclick="showMap('map13')" style="background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%); color: #991b1b; font-weight: 600; border: 1px solid #fca5a5;">📊 Comparative 2015-23</button>
+    </div>
+
+    <div id="map-container">
+        <iframe id="map-iframe" src="map1_travel_burden_heatmap.html"></iframe>
+    </div>
+
+    <script>
+        const mapFiles = {
+            'map1': 'map1_travel_burden_heatmap.html',
+            'map3': 'map3_indigenous_access_crisis.html',
+            'map_atlantic': 'map_atlantic_crisis.html',
+            'map5': 'map5_patient_flow_animated.html',
+            'map_journeys': 'map_individual_patient_journeys.html',
+            'map12': 'map12_regression_drivers.html',
+            'map_nl': 'map_province_newfoundland_labrador.html',
+            'map_ns': 'map_province_nova_scotia.html',
+            'map_pe': 'map_province_prince_edward_island.html',
+            'map_nb': 'map_province_new_brunswick.html',
+            'map_qc': 'map_province_quebec.html',
+            'map_on': 'map_province_ontario.html',
+            'map_mb': 'map_province_manitoba.html',
+            'map_sk': 'map_province_saskatchewan.html',
+            'map_ab': 'map_province_alberta.html',
+            'map_bc': 'map_province_british_columbia.html',
+            'map_yt': 'map_province_yukon.html',
+            'map_nt': 'map_province_northwest_territories.html',
+            'map_nu': 'map_province_nunavut.html',
+            'map13': 'map13_comparative_analysis_2015_2023.html'
+        };
+
+        function showMap(mapId) {
+            // Update active tab
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            // Load map
+            const iframe = document.getElementById('map-iframe');
+            iframe.src = mapFiles[mapId];
+        }
+    </script>
+</body>
+</html>

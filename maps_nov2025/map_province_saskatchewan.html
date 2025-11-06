@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Saskatchewan</title>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBH_yuU7_TfAJmuf_h04UsmKKhC0XPWerA"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: #f8fafc; overflow: hidden; }
+        #map { width: 100%; height: 100vh; }
+
+        .info-panel {
+            position: absolute; top: 16px; left: 16px; background: rgba(255, 255, 255, 0.97);
+            padding: 16px 20px; border-radius: 10px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            max-width: 320px; z-index: 1000; border: 1px solid #e2e8f0;
+            border-left: 4px solid #f97316;
+        }
+
+        .info-title {
+            font-size: 15px; font-weight: 600; color: #1e293b; margin-bottom: 6px;
+            letter-spacing: -0.02em;
+        }
+
+        .info-subtitle {
+            font-size: 12px; color: #64748b; margin-bottom: 8px; font-weight: 500;
+        }
+
+        .info-description {
+            font-size: 11px; color: #64748b; line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <div class="info-panel">
+        <div class="info-title">Saskatchewan</div>
+        <div class="info-subtitle">Catchment Area: 11 patients</div>
+        <div class="info-description">Saskatoon DBS Center</div>
+    </div>
+
+    <div id="map"></div>
+
+    <script>
+        const flowsData = [{"from_lat": 46.019756972827565, "from_lng": -70.74402508858176, "to_lat": 52.1332, "to_lng": -106.67, "distance": 134.9, "fsa": "G0M", "center": "Saskatoon", "color": "#f97316", "weight": 1.3, "opacity": 0.5}, {"from_lat": 45.58187290635535, "from_lng": -70.90287898717601, "to_lat": 52.1332, "to_lng": -106.67, "distance": 94.2, "fsa": "G6B", "center": "Saskatoon", "color": "#f97316", "weight": 1.0, "opacity": 0.4}, {"from_lat": 46.05398992413665, "from_lng": -71.99551767277119, "to_lat": 52.1332, "to_lng": -106.67, "distance": 94.5, "fsa": "G6P", "center": "Saskatoon", "color": "#f97316", "weight": 1.0, "opacity": 0.4}, {"from_lat": 45.407839913359645, "from_lng": -71.82656543566961, "to_lat": 52.1332, "to_lng": -106.67, "distance": 7.7, "fsa": "J0B", "center": "Saskatoon", "color": "#f97316", "weight": 1.0, "opacity": 0.4}, {"from_lat": 45.44416010310157, "from_lng": -71.98152066761398, "to_lat": 52.1332, "to_lng": -106.67, "distance": 12.7, "fsa": "J1C", "center": "Saskatoon", "color": "#f97316", "weight": 1.0, "opacity": 0.4}, {"from_lat": 45.4302169540062, "from_lng": -71.92085909817769, "to_lat": 52.1332, "to_lng": -106.67, "distance": 9.2, "fsa": "J1J", "center": "Saskatoon", "color": "#f97316", "weight": 1.0, "opacity": 0.4}, {"from_lat": 45.431285208244084, "from_lng": -71.90291114046704, "to_lat": 52.1332, "to_lng": -106.67, "distance": 15.8, "fsa": "J1L", "center": "Saskatoon", "color": "#f97316", "weight": 1.0, "opacity": 0.4}, {"from_lat": 45.40239490288426, "from_lng": -72.73303740385099, "to_lat": 52.1332, "to_lng": -106.67, "distance": 91.6, "fsa": "J2J", "center": "Saskatoon", "color": "#f97316", "weight": 1.0, "opacity": 0.4}, {"from_lat": 46.24626946520987, "from_lng": -72.59285781255741, "to_lat": 52.1332, "to_lng": -106.67, "distance": 136.8, "fsa": "J3T", "center": "Saskatoon", "color": "#f97316", "weight": 1.3, "opacity": 0.5}, {"from_lat": 45.6887910785183, "from_lng": -74.06751392605294, "to_lat": 52.1332, "to_lng": -106.67, "distance": 203.5, "fsa": "J7N", "center": "Saskatoon", "color": "#f97316", "weight": 1.3, "opacity": 0.5}, {"from_lat": 45.675875433706466, "from_lng": -74.03574970450244, "to_lat": 52.1332, "to_lng": -106.67, "distance": 203.5, "fsa": "J7N", "center": "Saskatoon", "color": "#f97316", "weight": 1.3, "opacity": 0.5}];
+        const centers = [{"name": "Saskatoon", "lat": 52.1332, "lon": -106.67}, {"name": "Saskatoon", "lat": 52.1332, "lon": -106.67}, {"name": "Saskatoon", "lat": 52.1332, "lon": -106.67}, {"name": "Saskatoon", "lat": 52.1332, "lon": -106.67}, {"name": "Saskatoon", "lat": 52.1332, "lon": -106.67}, {"name": "Saskatoon", "lat": 52.1332, "lon": -106.67}, {"name": "Saskatoon", "lat": 52.1332, "lon": -106.67}, {"name": "Saskatoon", "lat": 52.1332, "lon": -106.67}, {"name": "Saskatoon", "lat": 52.1332, "lon": -106.67}, {"name": "Saskatoon", "lat": 52.1332, "lon": -106.67}, {"name": "Saskatoon", "lat": 52.1332, "lon": -106.67}];
+
+        function initMap() {
+            const map = new google.maps.Map(document.getElementById('map'), {
+                center: { lat: 54.0, lng: -106.0 },
+                zoom: 5.5,
+                mapTypeId: 'terrain',
+                styles: [
+                    { featureType: 'administrative.province', elementType: 'geometry.stroke',
+                       stylers: [{ color: '#1e293b' }, { weight: 2.5 }] },
+                    { featureType: 'water', elementType: 'geometry', stylers: [{ color: '#dbeafe' }] },
+                    { featureType: 'landscape', elementType: 'geometry', stylers: [{ color: '#f8fafc' }] },
+                    { featureType: 'poi', stylers: [{ visibility: 'off' }] },
+                    { featureType: 'road', elementType: 'labels', stylers: [{ visibility: 'off' }] }
+                ],
+                zoomControl: true,
+                mapTypeControl: false,
+                streetViewControl: false,
+                fullscreenControl: true
+            });
+
+            // Add DBS centers
+            centers.forEach(center => {
+                new google.maps.Marker({
+                    position: { lat: center.lat, lng: center.lon },
+                    map: map,
+                    icon: {
+                        path: google.maps.SymbolPath.CIRCLE,
+                        scale: 8,
+                        fillColor: '#f97316',
+                        fillOpacity: 1,
+                        strokeColor: 'white',
+                        strokeWeight: 3
+                    },
+                    title: center.name,
+                    zIndex: 1000
+                });
+            });
+
+            // Draw patient flows
+            flowsData.forEach(flow => {
+                const arrowScale = flow.distance > 1000 ? 4.5 : (flow.distance > 500 ? 4.0 : 3.5);
+
+                const lineSymbol = {
+                    path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
+                    scale: arrowScale,
+                    strokeColor: flow.color,
+                    fillColor: flow.color,
+                    fillOpacity: 1
+                };
+
+                new google.maps.Polyline({
+                    path: [
+                        { lat: flow.from_lat, lng: flow.from_lng },
+                        { lat: flow.to_lat, lng: flow.to_lng }
+                    ],
+                    geodesic: true,
+                    strokeColor: flow.color,
+                    strokeOpacity: flow.opacity,
+                    strokeWeight: flow.weight,
+                    icons: [{
+                        icon: lineSymbol,
+                        offset: '65%'
+                    }],
+                    map: map
+                });
+
+                // Patient origin marker
+                new google.maps.Marker({
+                    position: { lat: flow.from_lat, lng: flow.from_lng },
+                    map: map,
+                    icon: {
+                        path: google.maps.SymbolPath.CIRCLE,
+                        scale: 2.5,
+                        fillColor: flow.color,
+                        fillOpacity: 0.7,
+                        strokeColor: 'white',
+                        strokeWeight: 0.5
+                    },
+                    zIndex: 10
+                });
+            });
+        }
+
+        window.onload = initMap;
+    </script>
+</body>
+</html>

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alberta - DBS Catchment</title>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBH_yuU7_TfAJmuf_h04UsmKKhC0XPWerA"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: #f8fafc; overflow: hidden; }
+        #map { width: 100%; height: 100vh; }
+
+        .info-panel {
+            position: absolute; top: 16px; left: 16px; background: rgba(255, 255, 255, 0.97);
+            padding: 16px 20px; border-radius: 10px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            max-width: 280px; z-index: 1000; border: 1px solid #e2e8f0;
+        }
+
+        .info-title {
+            font-size: 15px; font-weight: 600; color: #1e293b; margin-bottom: 8px;
+            letter-spacing: -0.02em;
+        }
+
+        .info-stat {
+            font-size: 11px; color: #64748b; line-height: 1.6;
+        }
+
+        .stat-value {
+            font-weight: 600; color: #ef4444;
+        }
+    </style>
+</head>
+<body>
+    <div class="info-panel">
+        <div class="info-title">Alberta DBS Catchment</div>
+        <div class="info-stat">
+            <span class="stat-value">100 patients</span> traveled to 2 DBS centers in this province/region.
+        </div>
+    </div>
+
+    <div id="map"></div>
+
+    <script>
+        const flowsData = [{"from_lat": 48.56541711385274, "from_lng": -67.4828768610548, "to_lat": 51.0447, "to_lng": -114.0719, "distance": 648.4, "fsa": "G0J", "center": "Calgary", "color": "#ef4444", "weight": 2.0, "opacity": 0.7}, {"from_lat": 48.41652605939431, "from_lng": -71.06178087987765, "to_lat": 51.0447, "to_lng": -114.0719, "distance": 455.4, "fsa": "G7H", "center": "Calgary", "color": "#ef4444", "weight": 2.0, "opacity": 0.7}, {"from_lat": 46.31484475041132, "from_lng": -72.6718028657806, "to_lat": 51.0447, "to_lng": -114.0719, "distance": 129.9, "fsa": "G9B", "center": "Calgary", "color": "#ef4444", "weight": 1.2, "opacity": 0.45}, {"from_lat": 45.58550263491801, "from_lng": -73.6016491107686, "to_lat": 51.0447, "to_lng": -114.0719, "distance": 14.9, "fsa": "H1H", "center": "Calgary", "color": "#ef4444", "weight": 1.0, "opacity": 0.35}, {"from_lat": 45.62244895857701, "from_lng": -73.55003140927487, "to_lat": 51.0447, "to_lng": -114.0719, "distance": 13.7, "fsa": "H1K", "center": "Calgary", "color": "#ef4444", "weight": 1.0, "opacity": 0.35}, {"from_lat": 45.59948111260211, "from_lng": -73.68020559513923, "to_lat": 51.0447, "to_lng": -114.0719, "distance": 11.3, "fsa": "H2B", "center": "Calgary", "color": "#ef4444", "weight": 1.0, "opacity": 0.35}, {"from_lat": 45.55492903209141, "from_lng": -73.64633102727379, "to_lat": 51.0447, "to_lng": -114.0719, "distance": 8.1, "fsa": "H3N", "center": "Calgary", "color": "#ef4444", "weight": 1.0, "opacity": 0.35}, {"from_lat": 45.57412893879998, "from_lng": -73.80929009823677, "to_lat": 51.0447, "to_lng": -114.0719, "distance": 36.3, "fsa": "H7P", "center": "Calgary", "color": "#ef4444", "weight": 1.0, "opacity": 0.35}, {"from_lat": 45.533486918888514, "from_lng": -73.82198985771545, "to_lat": 51.0447, "to_lng": -114.0719, "distance": 38.2, "fsa": "H7R", "center": "Calgary", "color": "#ef4444", "weight": 1.0, "opacity": 0.35}, {"from_lat": 45.47038037572226, "from_lng": -73.67858925172443, "to_lat": 51.0447, "to_lng": -114.0719, "distance": 18.0, "fsa": "H8T", "center": "Calgary", "color": "#ef4444", "weight": 1.0, "opacity": 0.35}, {"from_lat": 45.18573218723969, "from_lng": -73.17952913961415, "to_lat": 51.0447, "to_lng": -114.0719, "distance": 61.8, "fsa": "J0J", "center": "Calgary", "color": "#ef4444", "weight": 1.0, "opacity": 0.35}, {"from_lat": 45.14287806292512, "from_lng": -73.25535650253542, "to_lat": 51.0447, "to_lng": -114.0719, "distance": 61.8, "fsa": "J0J", "center": "Calgary", "color": "#ef4444", "weight": 1.0, "opacity": 0.35}, {"from_lat": 45.614770172561606, "from_lng": -73.93408654398483, "to_lat": 51.0447, "to_lng": -114.0719, "distance": 45.8, "fsa": "J0N", "center": "Calgary", "color": "#ef4444", "weight": 1.0, "opacity": 0.35}, {"from_lat": 45.73285640476452, "from_lng": -74.77378271288066, "to_lat": 51.0447, "to_lng": -114.0719, "distance": 131.4, "fsa": "J0V", "center": "Calgary", "color": "#ef4444", "weight": 1.2, "opacity": 0.45}, {"from_lat": 45.27611108906086, "from_lng": -72.19897239162766, "to_lat": 51.0447, "to_lng": -114.0719, "distance": 126.9, "fsa": "J1X", "center": "Calgary", "color": "#ef4444", "weight": 1.2, "opacity": 0.45}, {"from_lat": 45.84212795780172, "from_lng": -72.44421229131882, "to_lat": 51.0447, "to_lng": -114.0719, "distance": 111.5, "fsa": "J2A", "center": "Calgary", "color": "#ef4444", "weight": 1.2, "opacity": 0.45}, {"from_lat": 45.88266477322478, "from_lng": -72.47749729033502, "to_lat": 51.0447, "to_lng": -114.0719, "distance": 102.7, "fsa": "J2C", "center": "Calgary", "color": "#ef4444", "weight": 1.2, "opacity": 0.45}, {"from_lat": 45.375774159911145, "from_lng": -72.77063358159121, "to_lat": 51.0447, "to_lng": -114.0719, "distance": 83.6, "fsa": "J2G", "center": "Calgary", "color": "#ef4444", "weight": 1.0, "opacity": 0.35}, {"from_lat": 45.639802788219896, "from_lng": -72.9349878612973, "to_lat": 51.0447, "to_lng": -114.0719, "distance": 58.3, "fsa": "J2R", "center": "Calgary", "color": "#ef4444", "weight": 1.0, "opacity": 0.35}, {"from_lat": 45.66786216063702, "from_lng": -72.96699868724085, "to_lat": 51.0447, "to_lng": -114.0719, "distance": 58.3, "fsa": "J2R", "center": "Calgary", "color": "#ef4444", "weight": 1.0, "opacity": 0.35}, {"from_lat": 45.305073337464556, "from_lng": -73.32466962630113, "to_lat": 51.0447, "to_lng": -114.0719, "distance": 38.6, "fsa": "J3A", "center": "Calgary", "color": "#ef4444", "weight": 1.0, "opacity": 0.35}, {"from_lat": 45.29011351708111, "from_lng": -73.29478948205566, "to_lat": 51.0447, "to_lng": -114.0719, "distance": 43.2, "fsa": "J3B", "center": "Calgary", "color": "#ef4444", "weight": 1.0, "opacity": 0.35}, {"from_lat": 45.551182110275924, "from_lng": -73.14100106642132, "to_lat": 51.0447, "to_lng": -114.0719, "distance": 35.0, "fsa": "J3H", "center": "Calgary", "color": "#ef4444", "weight": 1.0, "opacity": 0.35}, {"from_lat": 45.44705428545625, "from_lng": -73.26294031549956, "to_lat": 51.0447, "to_lng": -114.0719, "distance": 34.6, "fsa": "J3L", "center": "Calgary", "color": "#ef4444", "weight": 1.0, "opacity": 0.35}, {"from_lat": 45.47000188626474, "from_lng": -73.24713636225576, "to_lat": 51.0447, "to_lng": -114.0719, "distance": 34.6, "fsa": "J3L", "center": "Calgary", "color": "#ef4444", "weight": 1.0, "opacity": 0.35}, {"from_lat": 45.66757504667018, "from_lng": -73.42769747210514, "to_lat": 51.0447, "to_lng": -114.0719, "distance": 26.8, "fsa": "J3X", "center": "Calgary", "color": "#ef4444", "weight": 1.0, "opacity": 0.35}, {"from_lat": 45.52324772714645, "from_lng": -73.5211223537597, "to_lat": 51.0447, "to_lng": -114.0719, "distance": 10.6, "fsa": "J4J", "center": "Calgary", "color": "#ef4444", "weight": 1.0, "opacity": 0.35}, {"from_lat": 45.53432843356314, "from_lng": -73.45440115618257, "to_lat": 51.0447, "to_lng": -114.0719, "distance": 12.5, "fsa": "J4L", "center": "Calgary", "color": "#ef4444", "weight": 1.0, "opacity": 0.35}, {"from_lat": 45.50309601955981, "from_lng": -73.51127629453636, "to_lat": 51.0447, "to_lng": -114.0719, "distance": 8.5, "fsa": "J4P", "center": "Calgary", "color": "#ef4444", "weight": 1.0, "opacity": 0.35}, {"from_lat": 45.48943923248282, "from_lng": -73.4722783197184, "to_lat": 51.0447, "to_lng": -114.0719, "distance": 8.5, "fsa": "J4P", "center": "Calgary", "color": "#ef4444", "weight": 1.0, "opacity": 0.35}, {"from_lat": 45.48518375295319, "from_lng": -73.50947809291303, "to_lat": 51.0447, "to_lng": -114.0719, "distance": 11.2, "fsa": "J4V", "center": "Calgary", "color": "#ef4444", "weight": 1.0, "opacity": 0.35}, {"from_lat": 45.424835744302186, "from_lng": -73.48690077221609, "to_lat": 51.0447, "to_lng": -114.0719, "distance": 20.9, "fsa": "J4X", "center": "Calgary", "color": "#ef4444", "weight": 1.0, "opacity": 0.35}, {"from_lat": 45.44735960259094, "from_lng": -73.48056540210753, "to_lat": 51.0447, "to_lng": -114.0719, "distance": 16.9, "fsa": "J4Z", "center": "Calgary", "color": "#ef4444", "weight": 1.0, "opacity": 0.35}, {"from_lat": 45.74410881067102, "from_lng": -74.12865714896826, "to_lat": 51.0447, "to_lng": -114.0719, "distance": 69.1, "fsa": "J5K", "center": "Calgary", "color": "#ef4444", "weight": 1.0, "opacity": 0.35}, {"from_lat": 45.77144615667089, "from_lng": -73.4020706382727, "to_lat": 51.0447, "to_lng": -114.0719, "distance": 37.9, "fsa": "J5Y", "center": "Calgary", "color": "#ef4444", "weight": 1.0, "opacity": 0.35}, {"from_lat": 46.06029580903329, "from_lng": -73.449930716874, "to_lat": 51.0447, "to_lng": -114.0719, "distance": 72.8, "fsa": "J6E", "center": "Calgary", "color": "#ef4444", "weight": 1.0, "opacity": 0.35}, {"from_lat": 46.0271486889162, "from_lng": -73.4599437012963, "to_lat": 51.0447, "to_lng": -114.0719, "distance": 72.8, "fsa": "J6E", "center": "Calgary", "color": "#ef4444", "weight": 1.0, "opacity": 0.35}, {"from_lat": 45.27871584173159, "from_lng": -74.11787552230327, "to_lat": 51.0447, "to_lng": -114.0719, "distance": 61.0, "fsa": "J6S", "center": "Calgary", "color": "#ef4444", "weight": 1.0, "opacity": 0.35}, {"from_lat": 45.72473076343217, "from_lng": -73.6757082414526, "to_lat": 51.0447, "to_lng": -114.0719, "distance": 32.9, "fsa": "J6X", "center": "Calgary", "color": "#ef4444", "weight": 1.0, "opacity": 0.35}, {"from_lat": 45.61130940493965, "from_lng": -73.76777535413298, "to_lat": 51.0447, "to_lng": -114.0719, "distance": 47.0, "fsa": "J7A", "center": "Calgary", "color": "#ef4444", "weight": 1.0, "opacity": 0.35}, {"from_lat": 45.66860437192494, "from_lng": -73.778858084427, "to_lat": 51.0447, "to_lng": -114.0719, "distance": 49.0, "fsa": "J7B", "center": "Calgary", "color": "#ef4444", "weight": 1.0, "opacity": 0.35}, {"from_lat": 45.55429602016578, "from_lng": -73.83818569718491, "to_lat": 51.0447, "to_lng": -114.0719, "distance": 42.8, "fsa": "J7P", "center": "Calgary", "color": "#ef4444", "weight": 1.0, "opacity": 0.35}, {"from_lat": 45.419408526432576, "from_lng": -73.97682088208866, "to_lat": 51.0447, "to_lng": -114.0719, "distance": 44.1, "fsa": "J7V", "center": "Calgary", "color": "#ef4444", "weight": 1.0, "opacity": 0.35}, {"from_lat": 47.758140596264305, "from_lng": -64.96192278662244, "to_lat": 53.5461, "to_lng": -113.4938, "distance": 647.0, "fsa": "E1W", "center": "Edmonton", "color": "#ef4444", "weight": 2.0, "opacity": 0.7}, {"from_lat": 46.92836045895448, "from_lng": -71.27949548219024, "to_lat": 53.5461, "to_lng": -113.4938, "distance": 18.7, "fsa": "G0A", "center": "Edmonton", "color": "#ef4444", "weight": 1.0, "opacity": 0.35}, {"from_lat": 46.90860399161558, "from_lng": -71.30454864039335, "to_lat": 53.5461, "to_lng": -113.4938, "distance": 18.7, "fsa": "G0A", "center": "Edmonton", "color": "#ef4444", "weight": 1.0, "opacity": 0.35}, {"from_lat": 46.96329546664162, "from_lng": -71.32284189059429, "to_lat": 53.5461, "to_lng": -113.4938, "distance": 18.7, "fsa": "G0A", "center": "Edmonton", "color": "#ef4444", "weight": 1.0, "opacity": 0.35}, {"from_lat": 46.933614712150735, "from_lng": -71.2642217948563, "to_lat": 53.5461, "to_lng": -113.4938, "distance": 18.7, "fsa": "G0A", "center": "Edmonton", "color": "#ef4444", "weight": 1.0, "opacity": 0.35}, {"from_lat": 47.793892441694034, "from_lng": -69.31700046260714, "to_lat": 53.5461, "to_lng": -113.4938, "distance": 256.5, "fsa": "G0L", "center": "Edmonton", "color": "#ef4444", "weight": 1.5, "opacity": 0.55}, {"from_lat": 46.0834285408933, "from_lng": -71.19409458223645, "to_lat": 53.5461, "to_lng": -113.4938, "distance": 115.2, "fsa": "G0N", "center": "Edmonton", "color": "#ef4444", "weight": 1.2, "opacity": 0.45}, {"from_lat": 46.513640306840244, "from_lng": -71.3537848623196, "to_lat": 53.5461, "to_lng": -113.4938, "distance": 52.3, "fsa": "G0S", "center": "Edmonton", "color": "#ef4444", "weight": 1.0, "opacity": 0.35}, {"from_lat": 48.44429120208228, "from_lng": -70.9146614626129, "to_lat": 53.5461, "to_lng": -113.4938, "distance": 223.8, "fsa": "G0V", "center": "Edmonton", "color": "#ef4444", "weight": 1.5, "opacity": 0.55}, {"from_lat": 48.48558012386299, "from_lng": -70.91244621807314, "to_lat": 53.5461, "to_lng": -113.4938, "distance": 223.8, "fsa": "G0V", "center": "Edmonton", "color": "#ef4444", "weight": 1.5, "opacity": 0.55}, {"from_lat": 46.888733704990116, "from_lng": -71.16874526566326, "to_lat": 53.5461, "to_lng": -113.4938, "distance": 10.9, "fsa": "G1B", "center": "Edmonton", "color": "#ef4444", "weight": 1.0, "opacity": 0.35}, {"from_lat": 46.858388083627766, "from_lng": -71.26767984289252, "to_lat": 53.5461, "to_lng": -113.4938, "distance": 6.7, "fsa": "G1G", "center": "Edmonton", "color": "#ef4444", "weight": 1.0, "opacity": 0.35}, {"from_lat": 46.82371393513706, "from_lng": -71.24488888619794, "to_lat": 53.5461, "to_lng": -113.4938, "distance": 3.2, "fsa": "G1H", "center": "Edmonton", "color": "#ef4444", "weight": 1.0, "opacity": 0.35}, {"from_lat": 46.84984497177277, "from_lng": -71.29961704061787, "to_lat": 53.5461, "to_lng": -113.4938, "distance": 3.2, "fsa": "G1H", "center": "Edmonton", "color": "#ef4444", "weight": 1.0, "opacity": 0.35}, {"from_lat": 46.85541142306193, "from_lng": -71.25444144247942, "to_lat": 53.5461, "to_lng": -113.4938, "distance": 3.2, "fsa": "G1H", "center": "Edmonton", "color": "#ef4444", "weight": 1.0, "opacity": 0.35}, {"from_lat": 46.825463473431874, "from_lng": -71.29126534459223, "to_lat": 53.5461, "to_lng": -113.4938, "distance": 3.2, "fsa": "G1H", "center": "Edmonton", "color": "#ef4444", "weight": 1.0, "opacity": 0.35}, {"from_lat": 46.85526548219896, "from_lng": -71.20258080057518, "to_lat": 53.5461, "to_lng": -113.4938, "distance": 0.4, "fsa": "G1J", "center": "Edmonton", "color": "#ef4444", "weight": 1.0, "opacity": 0.35}, {"from_lat": 46.82830693371741, "from_lng": -71.24012868469431, "to_lat": 53.5461, "to_lng": -113.4938, "distance": 1.6, "fsa": "G1L", "center": "Edmonton", "color": "#ef4444", "weight": 1.0, "opacity": 0.35}, {"from_lat": 46.814875397288226, "from_lng": -71.29699909560965, "to_lat": 53.5461, "to_lng": -113.4938, "distance": 11.0, "fsa": "G1P", "center": "Edmonton", "color": "#ef4444", "weight": 1.0, "opacity": 0.35}, {"from_lat": 46.79111835943978, "from_lng": -71.29083413788338, "to_lat": 53.5461, "to_lng": -113.4938, "distance": 6.4, "fsa": "G1S", "center": "Edmonton", "color": "#ef4444", "weight": 1.0, "opacity": 0.35}, {"from_lat": 46.769211021360384, "from_lng": -71.30370349309575, "to_lat": 53.5461, "to_lng": -113.4938, "distance": 9.5, "fsa": "G1T", "center": "Edmonton", "color": "#ef4444", "weight": 1.0, "opacity": 0.35}, {"from_lat": 46.77874365758636, "from_lng": -71.24055035589406, "to_lat": 53.5461, "to_lng": -113.4938, "distance": 9.5, "fsa": "G1T", "center": "Edmonton", "color": "#ef4444", "weight": 1.0, "opacity": 0.35}, {"from_lat": 46.75447965246371, "from_lng": -71.30497426110045, "to_lat": 53.5461, "to_lng": -113.4938, "distance": 9.5, "fsa": "G1T", "center": "Edmonton", "color": "#ef4444", "weight": 1.0, "opacity": 0.35}, {"from_lat": 46.76295407530542, "from_lng": -71.32986249415511, "to_lat": 53.5461, "to_lng": -113.4938, "distance": 15.6, "fsa": "G1V", "center": "Edmonton", "color": "#ef4444", "weight": 1.0, "opacity": 0.35}, {"from_lat": 46.80374552473652, "from_lng": -71.33577731940815, "to_lat": 53.5461, "to_lng": -113.4938, "distance": 15.6, "fsa": "G1V", "center": "Edmonton", "color": "#ef4444", "weight": 1.0, "opacity": 0.35}, {"from_lat": 46.80880531520373, "from_lng": -71.24133802710169, "to_lat": 53.5461, "to_lng": -113.4938, "distance": 15.6, "fsa": "G1V", "center": "Edmonton", "color": "#ef4444", "weight": 1.0, "opacity": 0.35}, {"from_lat": 46.743622593618646, "from_lng": -71.33272391593084, "to_lat": 53.5461, "to_lng": -113.4938, "distance": 23.3, "fsa": "G1Y", "center": "Edmonton", "color": "#ef4444", "weight": 1.0, "opacity": 0.35}, {"from_lat": 46.830252454139305, "from_lng": -71.36731938217484, "to_lat": 53.5461, "to_lng": -113.4938, "distance": 14.6, "fsa": "G2B", "center": "Edmonton", "color": "#ef4444", "weight": 1.0, "opacity": 0.35}, {"from_lat": 46.841350227968725, "from_lng": -71.34884699204565, "to_lat": 53.5461, "to_lng": -113.4938, "distance": 11.1, "fsa": "G2C", "center": "Edmonton", "color": "#ef4444", "weight": 1.0, "opacity": 0.35}, {"from_lat": 46.827234305640275, "from_lng": -71.34353022719982, "to_lat": 53.5461, "to_lng": -113.4938, "distance": 11.1, "fsa": "G2C", "center": "Edmonton", "color": "#ef4444", "weight": 1.0, "opacity": 0.35}, {"from_lat": 46.77821314965533, "from_lng": -71.33171049832617, "to_lat": 53.5461, "to_lng": -113.4938, "distance": 16.7, "fsa": "G2E", "center": "Edmonton", "color": "#ef4444", "weight": 1.0, "opacity": 0.35}, {"from_lat": 46.78605912415768, "from_lng": -71.34303879033725, "to_lat": 53.5461, "to_lng": -113.4938, "distance": 16.7, "fsa": "G2E", "center": "Edmonton", "color": "#ef4444", "weight": 1.0, "opacity": 0.35}, {"from_lat": 46.79286841274841, "from_lng": -71.41039183958893, "to_lat": 53.5461, "to_lng": -113.4938, "distance": 17.8, "fsa": "G2G", "center": "Edmonton", "color": "#ef4444", "weight": 1.0, "opacity": 0.35}, {"from_lat": 46.85669036423247, "from_lng": -71.33769117605563, "to_lat": 53.5461, "to_lng": -113.4938, "distance": 9.3, "fsa": "G2K", "center": "Edmonton", "color": "#ef4444", "weight": 1.0, "opacity": 0.35}, {"from_lat": 46.81878068726807, "from_lng": -71.3452625446177, "to_lat": 53.5461, "to_lng": -113.4938, "distance": 9.3, "fsa": "G2K", "center": "Edmonton", "color": "#ef4444", "weight": 1.0, "opacity": 0.35}, {"from_lat": 46.83047325743384, "from_lng": -71.2890718376189, "to_lat": 53.5461, "to_lng": -113.4938, "distance": 9.3, "fsa": "G2K", "center": "Edmonton", "color": "#ef4444", "weight": 1.0, "opacity": 0.35}, {"from_lat": 46.72767266773198, "from_lng": -71.39813142047095, "to_lat": 53.5461, "to_lng": -113.4938, "distance": 26.6, "fsa": "G3A", "center": "Edmonton", "color": "#ef4444", "weight": 1.0, "opacity": 0.35}, {"from_lat": 46.88504012594504, "from_lng": -71.35686390716751, "to_lat": 53.5461, "to_lng": -113.4938, "distance": 14.2, "fsa": "G3E", "center": "Edmonton", "color": "#ef4444", "weight": 1.0, "opacity": 0.35}, {"from_lat": 46.87311096656671, "from_lng": -71.42419378281528, "to_lat": 53.5461, "to_lng": -113.4938, "distance": 20.4, "fsa": "G3G", "center": "Edmonton", "color": "#ef4444", "weight": 1.0, "opacity": 0.35}, {"from_lat": 47.64192688334652, "from_lng": -70.19457113428454, "to_lat": 53.5461, "to_lng": -113.4938, "distance": 141.1, "fsa": "G5A", "center": "Edmonton", "color": "#ef4444", "weight": 1.2, "opacity": 0.45}, {"from_lat": 48.41222947635003, "from_lng": -68.45181137045661, "to_lat": 53.5461, "to_lng": -113.4938, "distance": 326.1, "fsa": "G5N", "center": "Edmonton", "color": "#ef4444", "weight": 2.0, "opacity": 0.7}, {"from_lat": 46.95632422359089, "from_lng": -70.57843826395604, "to_lat": 53.5461, "to_lng": -113.4938, "distance": 88.0, "fsa": "G5V", "center": "Edmonton", "color": "#ef4444", "weight": 1.0, "opacity": 0.35}, {"from_lat": 46.09131365693202, "from_lng": -71.31332780481945, "to_lat": 53.5461, "to_lng": -113.4938, "distance": 114.7, "fsa": "G6H", "center": "Edmonton", "color": "#ef4444", "weight": 1.2, "opacity": 0.45}, {"from_lat": 46.64152161958444, "from_lng": -71.29232757777659, "to_lat": 53.5461, "to_lng": -113.4938, "distance": 36.3, "fsa": "G6J", "center": "Edmonton", "color": "#ef4444", "weight": 1.0, "opacity": 0.35}, {"from_lat": 46.17669753164563, "from_lng": -71.82847834152304, "to_lat": 53.5461, "to_lng": -113.4938, "distance": 108.6, "fsa": "G6L", "center": "Edmonton", "color": "#ef4444", "weight": 1.2, "opacity": 0.45}, {"from_lat": 46.79160441137781, "from_lng": -71.19908308901192, "to_lat": 53.5461, "to_lng": -113.4938, "distance": 42.6, "fsa": "G6V", "center": "Edmonton", "color": "#ef4444", "weight": 1.0, "opacity": 0.35}, {"from_lat": 46.820350095829184, "from_lng": -71.20751317341553, "to_lat": 53.5461, "to_lng": -113.4938, "distance": 42.6, "fsa": "G6V", "center": "Edmonton", "color": "#ef4444", "weight": 1.0, "opacity": 0.35}, {"from_lat": 46.73949912744316, "from_lng": -71.25365498156548, "to_lat": 53.5461, "to_lng": -113.4938, "distance": 24.7, "fsa": "G6X", "center": "Edmonton", "color": "#ef4444", "weight": 1.0, "opacity": 0.35}, {"from_lat": 46.73235585912603, "from_lng": -71.30412129383194, "to_lat": 53.5461, "to_lng": -113.4938, "distance": 29.0, "fsa": "G7A", "center": "Edmonton", "color": "#ef4444", "weight": 1.0, "opacity": 0.35}, {"from_lat": 48.31300802088657, "from_lng": -71.11724670437732, "to_lat": 53.5461, "to_lng": -113.4938, "distance": 194.5, "fsa": "G7N", "center": "Edmonton", "color": "#ef4444", "weight": 1.2, "opacity": 0.45}, {"from_lat": 48.428086388703875, "from_lng": -71.17802050995611, "to_lat": 53.5461, "to_lng": -113.4938, "distance": 212.7, "fsa": "G7S", "center": "Edmonton", "color": "#ef4444", "weight": 1.5, "opacity": 0.55}, {"from_lat": 48.40030033823459, "from_lng": -71.22685560093787, "to_lat": 53.5461, "to_lng": -113.4938, "distance": 212.7, "fsa": "G7S", "center": "Edmonton", "color": "#ef4444", "weight": 1.5, "opacity": 0.55}, {"from_lat": 48.403822398252395, "from_lng": -71.22191928525889, "to_lat": 53.5461, "to_lng": -113.4938, "distance": 213.9, "fsa": "G8A", "center": "Edmonton", "color": "#ef4444", "weight": 1.5, "opacity": 0.55}, {"from_lat": 46.371549665242576, "from_lng": -72.53862836225184, "to_lat": 53.5461, "to_lng": -113.4938, "distance": 135.8, "fsa": "G8Z", "center": "Edmonton", "color": "#ef4444", "weight": 1.2, "opacity": 0.45}, {"from_lat": 46.31158910633686, "from_lng": -72.58186237620893, "to_lat": 53.5461, "to_lng": -113.4938, "distance": 135.5, "fsa": "G9A", "center": "Edmonton", "color": "#ef4444", "weight": 1.2, "opacity": 0.45}, {"from_lat": 45.811781943508294, "from_lng": -72.37219657925745, "to_lat": 53.5461, "to_lng": -113.4938, "distance": 177.5, "fsa": "J2A", "center": "Edmonton", "color": "#ef4444", "weight": 1.2, "opacity": 0.45}, {"from_lat": 45.37907346143803, "from_lng": -75.8227147613644, "to_lat": 53.5461, "to_lng": -113.4938, "distance": 460.6, "fsa": "J9H", "center": "Edmonton", "color": "#ef4444", "weight": 2.0, "opacity": 0.7}];
+        const centers = [{"lat": 51.0447, "lon": -114.0719, "province": "Alberta", "site_ids": [20.0]}, {"lat": 53.5461, "lon": -113.4938, "province": "Alberta", "site_ids": [21.0]}];
+
+        function initMap() {
+            const map = new google.maps.Map(document.getElementById('map'), {
+                center: { lat: 54.0, lng: -115.0 },
+                zoom: 5.8,
+                mapTypeId: 'terrain',
+                styles: [
+                    { featureType: 'administrative.province', elementType: 'geometry.stroke',
+                       stylers: [{ color: '#1e293b' }, { weight: 2.5 }] },
+                    { featureType: 'water', elementType: 'geometry', stylers: [{ color: '#dbeafe' }] },
+                    { featureType: 'landscape', elementType: 'geometry', stylers: [{ color: '#f8fafc' }] },
+                    { featureType: 'poi', stylers: [{ visibility: 'off' }] },
+                    { featureType: 'road', elementType: 'labels', stylers: [{ visibility: 'off' }] }
+                ],
+                zoomControl: true,
+                mapTypeControl: false,
+                streetViewControl: false,
+                fullscreenControl: true
+            });
+
+            // Add DBS centers
+            centers.forEach(center => {
+                new google.maps.Marker({
+                    position: { lat: center.lat, lng: center.lon },
+                    map: map,
+                    icon: {
+                        path: google.maps.SymbolPath.CIRCLE,
+                        scale: 8,
+                        fillColor: '#ef4444',
+                        fillOpacity: 1,
+                        strokeColor: 'white',
+                        strokeWeight: 3
+                    },
+                    title: 'DBS Center',
+                    zIndex: 1000
+                });
+            });
+
+            // Draw patient flows
+            flowsData.forEach(flow => {
+                const arrowScale = flow.distance > 300 ? 4.0 : 3.0;
+
+                const lineSymbol = {
+                    path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
+                    scale: arrowScale,
+                    strokeColor: flow.color,
+                    fillColor: flow.color,
+                    fillOpacity: 1
+                };
+
+                new google.maps.Polyline({
+                    path: [
+                        { lat: flow.from_lat, lng: flow.from_lng },
+                        { lat: flow.to_lat, lng: flow.to_lng }
+                    ],
+                    geodesic: true,
+                    strokeColor: flow.color,
+                    strokeOpacity: flow.opacity,
+                    strokeWeight: flow.weight,
+                    icons: [{
+                        icon: lineSymbol,
+                        offset: '65%'
+                    }],
+                    map: map
+                });
+
+                // Patient origin marker
+                new google.maps.Marker({
+                    position: { lat: flow.from_lat, lng: flow.from_lng },
+                    map: map,
+                    icon: {
+                        path: google.maps.SymbolPath.CIRCLE,
+                        scale: 2.5,
+                        fillColor: flow.color,
+                        fillOpacity: 0.7,
+                        strokeColor: 'white',
+                        strokeWeight: 0.5
+                    },
+                    zIndex: 10
+                });
+            });
+        }
+
+        window.onload = initMap;
+    </script>
+</body>
+</html>

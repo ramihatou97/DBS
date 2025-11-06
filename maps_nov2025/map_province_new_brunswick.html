@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Brunswick</title>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBH_yuU7_TfAJmuf_h04UsmKKhC0XPWerA"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: #f8fafc; overflow: hidden; }
+        #map { width: 100%; height: 100vh; }
+
+        .info-panel {
+            position: absolute; top: 16px; left: 16px; background: rgba(255, 255, 255, 0.97);
+            padding: 16px 20px; border-radius: 10px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            max-width: 320px; z-index: 1000; border: 1px solid #e2e8f0;
+            border-left: 4px solid #f59e0b;
+        }
+
+        .info-title {
+            font-size: 15px; font-weight: 600; color: #1e293b; margin-bottom: 6px;
+            letter-spacing: -0.02em;
+        }
+
+        .info-subtitle {
+            font-size: 12px; color: #64748b; margin-bottom: 8px; font-weight: 500;
+        }
+
+        .info-description {
+            font-size: 11px; color: #64748b; line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <div class="info-panel">
+        <div class="info-title">New Brunswick</div>
+        <div class="info-subtitle">Patient Outflow: 11 patients</div>
+        <div class="info-description">No DBS center - patients travel to Halifax and Quebec</div>
+    </div>
+
+    <div id="map"></div>
+
+    <script>
+        const flowsData = [{"from_lat": 45.4028597843255, "from_lng": -65.99885051459901, "to_lat": 44.6488, "to_lng": -63.5752, "distance": 399.3, "fsa": "E2E", "center": "Halifax", "color": "#f59e0b", "weight": 1.8, "opacity": 0.6}, {"from_lat": 45.39044328501548, "from_lng": -65.97192222213164, "to_lat": 44.6488, "to_lng": -63.5752, "distance": 399.3, "fsa": "E2E", "center": "Halifax", "color": "#f59e0b", "weight": 1.8, "opacity": 0.6}, {"from_lat": 45.26414519201073, "from_lng": -66.11322245680294, "to_lat": 44.6488, "to_lng": -63.5752, "distance": 417.9, "fsa": "E2M", "center": "Halifax", "color": "#f59e0b", "weight": 1.8, "opacity": 0.6}, {"from_lat": 45.24950036004438, "from_lng": -66.0944603804866, "to_lat": 44.6488, "to_lng": -63.5752, "distance": 417.9, "fsa": "E2M", "center": "Halifax", "color": "#f59e0b", "weight": 1.8, "opacity": 0.6}, {"from_lat": 45.95338146750228, "from_lng": -66.57394658362968, "to_lat": 44.6488, "to_lng": -63.5752, "distance": 430.0, "fsa": "E3A", "center": "Halifax", "color": "#f59e0b", "weight": 1.8, "opacity": 0.6}, {"from_lat": 46.64148563032925, "from_lng": -64.87768231001581, "to_lat": 44.6488, "to_lng": -63.5752, "distance": 320.6, "fsa": "E4W", "center": "Halifax", "color": "#f59e0b", "weight": 1.8, "opacity": 0.6}, {"from_lat": 46.423034402979624, "from_lng": -67.55398244077813, "to_lat": 44.6488, "to_lng": -63.5752, "distance": 577.5, "fsa": "E7L", "center": "Halifax", "color": "#f59e0b", "weight": 1.8, "opacity": 0.6}, {"from_lat": 46.182068201167, "from_lng": -67.65500379640396, "to_lat": 44.6488, "to_lng": -63.5752, "distance": 530.5, "fsa": "E7M", "center": "Halifax", "color": "#f59e0b", "weight": 1.8, "opacity": 0.6}, {"from_lat": 45.90283281307728, "from_lng": -66.61093396390555, "to_lat": 43.6532, "to_lng": -79.3832, "distance": 1367.5, "fsa": "E3B", "center": "Toronto", "color": "#f59e0b", "weight": 2.5, "opacity": 0.75}, {"from_lat": 46.29536789085927, "from_lng": -64.61016089381454, "to_lat": 43.6532, "to_lng": -79.3832, "distance": 1479.4, "fsa": "E4R", "center": "Toronto", "color": "#f59e0b", "weight": 2.5, "opacity": 0.75}, {"from_lat": 47.758140596264305, "from_lng": -64.96192278662244, "to_lat": 53.5461, "to_lng": -113.4938, "distance": 647.0, "fsa": "E1W", "center": "Edmonton", "color": "#f59e0b", "weight": 1.8, "opacity": 0.6}];
+        const centers = [{"name": "Halifax", "lat": 44.6488, "lon": -63.5752}, {"name": "Halifax", "lat": 44.6488, "lon": -63.5752}, {"name": "Halifax", "lat": 44.6488, "lon": -63.5752}, {"name": "Halifax", "lat": 44.6488, "lon": -63.5752}, {"name": "Halifax", "lat": 44.6488, "lon": -63.5752}, {"name": "Halifax", "lat": 44.6488, "lon": -63.5752}, {"name": "Halifax", "lat": 44.6488, "lon": -63.5752}, {"name": "Halifax", "lat": 44.6488, "lon": -63.5752}, {"name": "Toronto", "lat": 43.6532, "lon": -79.3832}, {"name": "Toronto", "lat": 43.6532, "lon": -79.3832}, {"name": "Edmonton", "lat": 53.5461, "lon": -113.4938}];
+
+        function initMap() {
+            const map = new google.maps.Map(document.getElementById('map'), {
+                center: { lat: 46.5, lng: -66.0 },
+                zoom: 6.5,
+                mapTypeId: 'terrain',
+                styles: [
+                    { featureType: 'administrative.province', elementType: 'geometry.stroke',
+                       stylers: [{ color: '#1e293b' }, { weight: 2.5 }] },
+                    { featureType: 'water', elementType: 'geometry', stylers: [{ color: '#dbeafe' }] },
+                    { featureType: 'landscape', elementType: 'geometry', stylers: [{ color: '#f8fafc' }] },
+                    { featureType: 'poi', stylers: [{ visibility: 'off' }] },
+                    { featureType: 'road', elementType: 'labels', stylers: [{ visibility: 'off' }] }
+                ],
+                zoomControl: true,
+                mapTypeControl: false,
+                streetViewControl: false,
+                fullscreenControl: true
+            });
+
+            // Add DBS centers
+            centers.forEach(center => {
+                new google.maps.Marker({
+                    position: { lat: center.lat, lng: center.lon },
+                    map: map,
+                    icon: {
+                        path: google.maps.SymbolPath.CIRCLE,
+                        scale: 8,
+                        fillColor: '#f59e0b',
+                        fillOpacity: 1,
+                        strokeColor: 'white',
+                        strokeWeight: 3
+                    },
+                    title: center.name,
+                    zIndex: 1000
+                });
+            });
+
+            // Draw patient flows
+            flowsData.forEach(flow => {
+                const arrowScale = flow.distance > 1000 ? 4.5 : (flow.distance > 500 ? 4.0 : 3.5);
+
+                const lineSymbol = {
+                    path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
+                    scale: arrowScale,
+                    strokeColor: flow.color,
+                    fillColor: flow.color,
+                    fillOpacity: 1
+                };
+
+                new google.maps.Polyline({
+                    path: [
+                        { lat: flow.from_lat, lng: flow.from_lng },
+                        { lat: flow.to_lat, lng: flow.to_lng }
+                    ],
+                    geodesic: true,
+                    strokeColor: flow.color,
+                    strokeOpacity: flow.opacity,
+                    strokeWeight: flow.weight,
+                    icons: [{
+                        icon: lineSymbol,
+                        offset: '65%'
+                    }],
+                    map: map
+                });
+
+                // Patient origin marker
+                new google.maps.Marker({
+                    position: { lat: flow.from_lat, lng: flow.from_lng },
+                    map: map,
+                    icon: {
+                        path: google.maps.SymbolPath.CIRCLE,
+                        scale: 2.5,
+                        fillColor: flow.color,
+                        fillOpacity: 0.7,
+                        strokeColor: 'white',
+                        strokeWeight: 0.5
+                    },
+                    zIndex: 10
+                });
+            });
+        }
+
+        window.onload = initMap;
+    </script>
+</body>
+</html>

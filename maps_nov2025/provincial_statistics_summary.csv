@@ -1,0 +1,11 @@
+Province_Abbrev,Province_Name,Patient_Count,Median_Age,Median_Distance,Max_Distance,Avg_Income,Avg_Gini,Avg_Indigenous_Rate,Patient_Pct
+ON,Ontario,668,65.0,54.4,1386.8,94859,0.335,112.1,71.4
+QC,Quebec,110,64.5,33.7,648.8,81556,0.313,414.0,11.8
+AB,Alberta,62,63.0,33.3,3450.4,104976,0.337,307.4,6.6
+NS,Nova Scotia,28,64.0,105.5,2011.4,80889,0.306,114.6,3.0
+SK,Saskatchewan,26,63.5,10.2,349.8,88769,0.342,967.8,2.8
+NB,New Brunswick,11,60.0,429.7,1484.5,84164,0.309,58.3,1.2
+PE,Prince Edward Island,8,59.0,324.3,327.8,94250,0.3,62.9,0.9
+NL,Newfoundland and Labrador,6,64.5,2927.3,3082.3,91767,0.378,293.2,0.6
+BC,British Columbia,4,64.5,3789.6,4418.8,100750,0.354,37.0,0.4
+MB,Manitoba,2,60.0,1510.2,2226.2,85000,0.32,195.6,0.2

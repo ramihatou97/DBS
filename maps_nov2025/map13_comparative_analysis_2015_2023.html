@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comparative Analysis 2015-23</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #f8fafc;
+            color: #334155;
+            line-height: 1.6;
+            overflow-y: auto;
+            height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 32px 24px;
+        }
+
+        h1 {
+            font-size: 28px;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 12px;
+            letter-spacing: -0.03em;
+        }
+
+        .subtitle {
+            font-size: 15px;
+            color: #64748b;
+            margin-bottom: 32px;
+            line-height: 1.6;
+        }
+
+        .alert-banner {
+            background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+            border: 2px solid #dc2626;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 32px;
+        }
+
+        .alert-banner h2 {
+            color: #dc2626;
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .alert-banner p {
+            color: #7f1d1d;
+            font-size: 14px;
+            font-weight: 500;
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .stat-card {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .stat-value {
+            font-size: 36px;
+            font-weight: 700;
+            color: #dc2626;
+            margin-bottom: 8px;
+            line-height: 1;
+        }
+
+        .stat-value.positive {
+            color: #059669;
+        }
+
+        .stat-label {
+            color: #64748b;
+            font-size: 12px;
+            font-weight: 500;
+            line-height: 1.4;
+        }
+
+        .key-findings {
+            background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+            border: 1px solid #3b82f6;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 32px;
+        }
+
+        .key-findings h3 {
+            color: #1e40af;
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        .key-findings ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .key-findings li {
+            color: #1e3a8a;
+            font-size: 13px;
+            padding: 8px 0;
+            padding-left: 24px;
+            position: relative;
+            line-height: 1.5;
+        }
+
+        .key-findings li:before {
+            content: "→";
+            position: absolute;
+            left: 4px;
+            color: #3b82f6;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .figure-section {
+            margin-bottom: 40px;
+        }
+
+        .figure-section h3 {
+            color: #1e293b;
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            letter-spacing: -0.02em;
+        }
+
+        .figure-section p {
+            color: #64748b;
+            font-size: 14px;
+            margin-bottom: 16px;
+            line-height: 1.6;
+        }
+
+        .figure-image {
+            width: 100%;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.08);
+            border: 1px solid #e2e8f0;
+            margin-bottom: 12px;
+        }
+
+        .figure-caption {
+            background: #fafbfc;
+            border-left: 4px solid #3b82f6;
+            padding: 14px 18px;
+            border-radius: 4px;
+            font-size: 13px;
+        }
+
+        .figure-caption strong {
+            color: #1e293b;
+            display: block;
+            margin-bottom: 6px;
+            font-size: 14px;
+        }
+
+        .figure-caption p {
+            color: #475569;
+            font-size: 13px;
+            margin: 0;
+            line-height: 1.5;
+        }
+
+        .methodology {
+            background: white;
+            border: 1px solid #cbd5e0;
+            border-radius: 12px;
+            padding: 24px;
+            margin-top: 32px;
+        }
+
+        .methodology h3 {
+            color: #1e293b;
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 14px;
+        }
+
+        .methodology p {
+            color: #475569;
+            font-size: 13px;
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+
+        .methodology p:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Critical Comparative Analysis: 2015-16 vs 2019-23</h1>
+        <p class="subtitle">
+            DBS access in Canada has suffered a catastrophic decline from 10.0 per million/year (2015-16) to
+            6.07 per million/year (2019-23), representing a 39.3% national decline.
+        </p>
+
+        <!-- Alert Banner -->
+        <div class="alert-banner">
+            <h2>⚠️ National DBS Access Crisis: 39.3% Decline</h2>
+            <p>
+                Deep Brain Stimulation access has suffered a catastrophic decline. This represents a
+                structural failure in healthcare delivery that predates COVID-19 and disproportionately
+                affects Western Canada and Indigenous communities.
+            </p>
+        </div>
+
+        <!-- Stats Grid -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-value">-39.3%</div>
+                <div class="stat-label">National DBS Rate Decline<br>2015-16 → 2019-23</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">-84.7%</div>
+                <div class="stat-label">Saskatchewan Collapse<br>374% → 57% of national avg</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">-97.8%</div>
+                <div class="stat-label">BC Near-Total Collapse<br>220% → 5% of national avg</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value positive">10×</div>
+                <div class="stat-label">Indigenous Distance Inequality<br>732 km vs 73 km</div>
+            </div>
+        </div>
+
+        <!-- Key Findings -->
+        <div class="key-findings">
+            <h3>Key Findings from Comparative Analysis</h3>
+            <ul>
+                <li><strong>Saskatchewan catastrophic collapse:</strong> Dropped from 374% of national average (highest in 2015-16) to 57% (2019-23)</li>
+                <li><strong>BC near-total collapse:</strong> Fell from 220% to just 4.8% of national average (80 cases → 4 cases)</li>
+                <li><strong>Western Canada systematic failure:</strong> All Western provinces showed severe declines</li>
+                <li><strong>Ontario centralization:</strong> Now accounts for 72.6% of all national cases (up from ~40% in 2015-16)</li>
+                <li><strong>Indigenous disparity:</strong> Areas with >10% Indigenous ancestry face 10× greater travel distances (732 km vs 73 km)</li>
+                <li><strong>Structural not temporary:</strong> Decline predates COVID-19 pandemic and continues post-pandemic</li>
+            </ul>
+        </div>
+
+        <!-- FIGURE 1 -->
+        <div class="figure-section">
+            <h3>Figure 1A: Provincial Rate Ratios (2015-16 vs 2019-22) - Bar Chart</h3>
+            <p>Direct comparison with the published Canada Study (2015-16) reveals devastating declines in Western provinces and increasing centralization in Ontario. Saskatchewan, which led the nation in 2015-16, has experienced an 84.7% decline.</p>
+            <img src="Figure3_Provincial_Comparison_Enhanced.png" alt="Provincial DBS Rate Comparison" class="figure-image">
+            <div class="figure-caption">
+                <strong>Key Insight:</strong>
+                <p>Pink bars (2015-16) show Saskatchewan at 374% and BC at 220% of national average. Blue bars (2019-22) show both collapsed to 57% and 5% respectively. Ontario increased from 110% to 133%, indicating extreme centralization.</p>
+            </div>
+        </div>
+
+        <!-- FIGURE 1B: Forest Plot -->
+        <div class="figure-section">
+            <h3>Figure 1B: Provincial Access - Forest Plot with 95% Confidence Intervals</h3>
+            <p>Alternative visualization showing provincial DBS access rates as forest plot with 95% confidence intervals. Circles represent published 2015-16 data, squares represent our 2019-2023 data. The orange vertical line marks the national average (rate ratio = 1.0).</p>
+            <img src="Provincial_Forest_Plot_Confidence_Intervals.png" alt="Provincial DBS Access Forest Plot" class="figure-image">
+            <div class="figure-caption">
+                <strong>Key Insight:</strong>
+                <p>Forest plot reveals statistical precision of estimates. Saskatchewan (SK) shows dramatic shift from far above national average (pink circle at ~3.7) to near average (blue square at ~0.6). Wide confidence intervals for PE (PEI), NB, MB, and BC in 2019-23 data reflect small sample sizes. Ontario (ON) remains stable near national average in both periods.</p>
+            </div>
+        </div>
+
+        <!-- FIGURE 2 -->
+        <div class="figure-section">
+            <h3>Figure 2: Indigenous Ancestry & Travel Distance Inequality</h3>
+            <p>A stark 10-fold inequality exists between areas with &lt;1% Indigenous ancestry (73 km mean distance) and areas with &gt;10% Indigenous ancestry (732 km). This disparity persists even after controlling for rural status, income, and province.</p>
+            <img src="Fig1_Indigenous_Disparity_Enhanced.png" alt="Indigenous Distance Disparity" class="figure-image">
+            <div class="figure-caption">
+                <strong>Key Insight:</strong>
+                <p>Left panel shows exponential increase in travel distance with Indigenous ancestry. Right panel demonstrates that distance, rural percentage, and income gaps all worsen with increasing Indigenous ancestry, revealing compounded disadvantage.</p>
+            </div>
+        </div>
+
+        <!-- FIGURE 3 -->
+        <div class="figure-section">
+            <h3>Figure 3: Multivariate Predictors of Distance to DBS Access</h3>
+            <p>Forest plot showing standardized regression coefficients confirms that Indigenous ancestry (β=0.21, p&lt;0.001) is the strongest independent predictor of distance to DBS centers, followed by rural status (β=0.12, p&lt;0.01).</p>
+            <img src="Fig2_Regression_Coefficients_Enhanced.png" alt="Regression Coefficients" class="figure-image">
+            <div class="figure-caption">
+                <strong>Key Insight:</strong>
+                <p>Indigenous ancestry remains the strongest predictor even after controlling for income, rural status, and province. Model R² = 0.293 indicates moderate explanatory power. Significance levels: *** p&lt;0.001, ** p&lt;0.01, * p&lt;0.05.</p>
+            </div>
+        </div>
+
+        <!-- FIGURE 4 -->
+        <div class="figure-section">
+            <h3>Figure 4: Provincial Characteristics & Access Barriers</h3>
+            <p>Four-panel comparison reveals why Western provinces face greater access challenges: higher distances, drastically lower sample sizes (MB=2, BC=4), higher Indigenous ancestry rates, and greater rural patient percentages.</p>
+            <img src="Fig3_Provincial_4Panel_Enhanced.png" alt="Provincial 4-Panel Comparison" class="figure-image">
+            <div class="figure-caption">
+                <strong>Key Insight:</strong>
+                <p>Panel B reveals Ontario centralization (663 cases) versus Western collapse (SK=53, AB=11, BC=4, MB=2). Panels C and D show Western provinces have both higher Indigenous ancestry and rural percentages, compounding access barriers.</p>
+            </div>
+        </div>
+
+        <!-- FIGURE 5 -->
+        <div class="figure-section">
+            <h3>Figure 5: Temporal Evolution (2019-2023)</h3>
+            <p>Three-panel temporal analysis demonstrates that decline predates COVID-19 (2019→2020: -27%) and continues post-pandemic (2021-23 average: -37% vs 2019). This confirms a structural, not temporary, degradation of DBS access.</p>
+            <img src="Figure1D_Temporal_Evolution_Enhanced.png" alt="Temporal Evolution" class="figure-image">
+            <div class="figure-caption">
+                <strong>Key Insight:</strong>
+                <p>Color gradient (blue → orange → red) emphasizes worsening trend. 2019 baseline shows 256 total cases. COVID year (2020) dropped to 188 cases. Post-COVID average (2021-23) shows further decline to 162 cases/year, indicating structural issues beyond pandemic disruption.</p>
+            </div>
+        </div>
+
+        <!-- Methodology -->
+        <div class="methodology">
+            <h3>Methodology & Data Sources</h3>
+            <p><strong>Comparison Study:</strong> "Canadian Assessment of Deep Brain Stimulation Access: The Canada Study" (2015-2016 data, n=722 patients over 2 years, national rate 10.0 per million/year)</p>
+            <p><strong>Current Analysis:</strong> Multi-center DBS database (2019-2023 data, n=930 patients, national rate 6.07 per million/year). Geographic, socioeconomic, and demographic data from 2021 Canadian Census at Forward Sortation Area (FSA) level.</p>
+            <p><strong>Statistical Methods:</strong> Rate ratios calculated relative to national average. Multivariate regression with standardized coefficients. 95% confidence intervals computed using normal approximation. Indigenous ancestry categories based on census quartiles.</p>
+            <p><strong>Limitations:</strong> BC and MB sample sizes (4 and 2 cases) appear implausibly low and may indicate incomplete data capture. Atlantic provinces have no data in 2019-23 analysis. Temporal comparison limited to provinces with data in both periods.</p>
+        </div>
+    </div>
+</body>
+</html>

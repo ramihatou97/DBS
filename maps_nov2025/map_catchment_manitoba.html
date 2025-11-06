@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manitoba - DBS Catchment</title>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBH_yuU7_TfAJmuf_h04UsmKKhC0XPWerA"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: #f8fafc; overflow: hidden; }
+        #map { width: 100%; height: 100vh; }
+
+        .info-panel {
+            position: absolute; top: 16px; left: 16px; background: rgba(255, 255, 255, 0.97);
+            padding: 16px 20px; border-radius: 10px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            max-width: 280px; z-index: 1000; border: 1px solid #e2e8f0;
+        }
+
+        .info-title {
+            font-size: 15px; font-weight: 600; color: #1e293b; margin-bottom: 8px;
+            letter-spacing: -0.02em;
+        }
+
+        .info-stat {
+            font-size: 11px; color: #64748b; line-height: 1.6;
+        }
+
+        .stat-value {
+            font-weight: 600; color: #f59e0b;
+        }
+    </style>
+</head>
+<body>
+    <div class="info-panel">
+        <div class="info-title">Manitoba DBS Catchment</div>
+        <div class="info-stat">
+            <span class="stat-value">29 patients</span> traveled to 1 DBS center in this province/region.
+        </div>
+    </div>
+
+    <div id="map"></div>
+
+    <script>
+        const flowsData = [{"from_lat": 49.55574399214865, "from_lng": -112.87774089044125, "to_lat": 49.8951, "to_lng": -97.1384, "distance": 242.4, "fsa": "T0K", "center": "Winnipeg", "color": "#f59e0b", "weight": 1.5, "opacity": 0.55}, {"from_lat": 50.224219149067785, "from_lng": -113.7186988289587, "to_lat": 49.8951, "to_lng": -97.1384, "distance": 110.2, "fsa": "T0L", "center": "Winnipeg", "color": "#f59e0b", "weight": 1.2, "opacity": 0.45}, {"from_lat": 49.68699882322884, "from_lng": -112.8546995786878, "to_lat": 49.8951, "to_lng": -97.1384, "distance": 218.4, "fsa": "T1K", "center": "Winnipeg", "color": "#f59e0b", "weight": 1.5, "opacity": 0.55}, {"from_lat": 51.03086909226489, "from_lng": -113.43175235990692, "to_lat": 49.8951, "to_lng": -97.1384, "distance": 57.4, "fsa": "T1P", "center": "Winnipeg", "color": "#f59e0b", "weight": 1.0, "opacity": 0.35}, {"from_lat": 50.57636509626333, "from_lng": -111.9401574591563, "to_lat": 49.8951, "to_lng": -97.1384, "distance": 194.6, "fsa": "T1R", "center": "Winnipeg", "color": "#f59e0b", "weight": 1.2, "opacity": 0.45}, {"from_lat": 50.7560330348746, "from_lng": -114.0173299746387, "to_lat": 49.8951, "to_lng": -97.1384, "distance": 46.5, "fsa": "T1S", "center": "Winnipeg", "color": "#f59e0b", "weight": 1.0, "opacity": 0.35}, {"from_lat": 50.60507048382638, "from_lng": -113.8208776153471, "to_lat": 49.8951, "to_lng": -97.1384, "distance": 69.3, "fsa": "T1V", "center": "Winnipeg", "color": "#f59e0b", "weight": 1.0, "opacity": 0.35}, {"from_lat": 51.07416980891234, "from_lng": -115.3149130536849, "to_lat": 49.8951, "to_lng": -97.1384, "distance": 97.3, "fsa": "T1W", "center": "Winnipeg", "color": "#f59e0b", "weight": 1.0, "opacity": 0.35}, {"from_lat": 51.051664568348016, "from_lng": -113.7790249742471, "to_lat": 49.8951, "to_lng": -97.1384, "distance": 26.2, "fsa": "T1X", "center": "Winnipeg", "color": "#f59e0b", "weight": 1.0, "opacity": 0.35}, {"from_lat": 51.02756585749903, "from_lng": -113.96219838757277, "to_lat": 49.8951, "to_lng": -97.1384, "distance": 15.1, "fsa": "T2A", "center": "Winnipeg", "color": "#f59e0b", "weight": 1.0, "opacity": 0.35}, {"from_lat": 50.99868984457772, "from_lng": -114.03195390054807, "to_lat": 49.8951, "to_lng": -97.1384, "distance": 17.3, "fsa": "T2C", "center": "Winnipeg", "color": "#f59e0b", "weight": 1.0, "opacity": 0.35}, {"from_lat": 51.036647995790744, "from_lng": -114.10693628417542, "to_lat": 49.8951, "to_lng": -97.1384, "distance": 3.5, "fsa": "T2N", "center": "Winnipeg", "color": "#f59e0b", "weight": 1.0, "opacity": 0.35}, {"from_lat": 51.05283591348445, "from_lng": -114.11359930159615, "to_lat": 49.8951, "to_lng": -97.1384, "distance": 3.5, "fsa": "T2N", "center": "Winnipeg", "color": "#f59e0b", "weight": 1.0, "opacity": 0.35}, {"from_lat": 51.06691219796255, "from_lng": -114.10519459643157, "to_lat": 49.8951, "to_lng": -97.1384, "distance": 6.6, "fsa": "T2P", "center": "Winnipeg", "color": "#f59e0b", "weight": 1.0, "opacity": 0.35}, {"from_lat": 50.863295387458436, "from_lng": -114.0271099156779, "to_lat": 49.8951, "to_lng": -97.1384, "distance": 34.6, "fsa": "T2X", "center": "Winnipeg", "color": "#f59e0b", "weight": 1.0, "opacity": 0.35}, {"from_lat": 51.07423493760459, "from_lng": -114.22719739799608, "to_lat": 49.8951, "to_lng": -97.1384, "distance": 7.7, "fsa": "T3B", "center": "Winnipeg", "color": "#f59e0b", "weight": 1.0, "opacity": 0.35}, {"from_lat": 51.05704577361263, "from_lng": -114.11532426301311, "to_lat": 49.8951, "to_lng": -97.1384, "distance": 4.6, "fsa": "T3C", "center": "Winnipeg", "color": "#f59e0b", "weight": 1.0, "opacity": 0.35}, {"from_lat": 51.031707360463834, "from_lng": -114.12341115377009, "to_lat": 49.8951, "to_lng": -97.1384, "distance": 7.6, "fsa": "T3E", "center": "Winnipeg", "color": "#f59e0b", "weight": 1.0, "opacity": 0.35}, {"from_lat": 51.14608844293879, "from_lng": -114.2371206353078, "to_lat": 49.8951, "to_lng": -97.1384, "distance": 13.3, "fsa": "T3G", "center": "Winnipeg", "color": "#f59e0b", "weight": 1.0, "opacity": 0.35}, {"from_lat": 51.16422373553739, "from_lng": -114.11859704693312, "to_lat": 49.8951, "to_lng": -97.1384, "distance": 16.5, "fsa": "T3K", "center": "Winnipeg", "color": "#f59e0b", "weight": 1.0, "opacity": 0.35}, {"from_lat": 50.89036828440285, "from_lng": -113.92804249087135, "to_lat": 49.8951, "to_lng": -97.1384, "distance": 31.4, "fsa": "T3M", "center": "Winnipeg", "color": "#f59e0b", "weight": 1.0, "opacity": 0.35}, {"from_lat": 51.161210261316754, "from_lng": -114.10863907635724, "to_lat": 49.8951, "to_lng": -97.1384, "distance": 26.5, "fsa": "T3P", "center": "Winnipeg", "color": "#f59e0b", "weight": 1.0, "opacity": 0.35}, {"from_lat": 51.166844077392575, "from_lng": -114.14880273918362, "to_lat": 49.8951, "to_lng": -97.1384, "distance": 26.5, "fsa": "T3P", "center": "Winnipeg", "color": "#f59e0b", "weight": 1.0, "opacity": 0.35}, {"from_lat": 51.0436663560545, "from_lng": -114.27874328963239, "to_lat": 49.8951, "to_lng": -97.1384, "distance": 18.6, "fsa": "T3Z", "center": "Winnipeg", "color": "#f59e0b", "weight": 1.0, "opacity": 0.35}, {"from_lat": 51.08727752672643, "from_lng": -114.37245186524973, "to_lat": 49.8951, "to_lng": -97.1384, "distance": 18.6, "fsa": "T3Z", "center": "Winnipeg", "color": "#f59e0b", "weight": 1.0, "opacity": 0.35}, {"from_lat": 51.067774000732385, "from_lng": -114.3087263984635, "to_lat": 49.8951, "to_lng": -97.1384, "distance": 18.6, "fsa": "T3Z", "center": "Winnipeg", "color": "#f59e0b", "weight": 1.0, "opacity": 0.35}, {"from_lat": 51.2620116642042, "from_lng": -113.9232834055457, "to_lat": 49.8951, "to_lng": -97.1384, "distance": 33.7, "fsa": "T4A", "center": "Winnipeg", "color": "#f59e0b", "weight": 1.0, "opacity": 0.35}, {"from_lat": 51.27748442748292, "from_lng": -114.05537659525253, "to_lat": 49.8951, "to_lng": -97.1384, "distance": 34.6, "fsa": "T4B", "center": "Winnipeg", "color": "#f59e0b", "weight": 1.0, "opacity": 0.35}, {"from_lat": 51.22723164117595, "from_lng": -114.5116184994213, "to_lat": 49.8951, "to_lng": -97.1384, "distance": 33.7, "fsa": "T4C", "center": "Winnipeg", "color": "#f59e0b", "weight": 1.0, "opacity": 0.35}];
+        const centers = [{"lat": 49.8951, "lon": -97.1384, "province": "Manitoba", "site_ids": [18.0]}];
+
+        function initMap() {
+            const map = new google.maps.Map(document.getElementById('map'), {
+                center: { lat: 54.0, lng: -98.0 },
+                zoom: 5.5,
+                mapTypeId: 'terrain',
+                styles: [
+                    { featureType: 'administrative.province', elementType: 'geometry.stroke',
+                       stylers: [{ color: '#1e293b' }, { weight: 2.5 }] },
+                    { featureType: 'water', elementType: 'geometry', stylers: [{ color: '#dbeafe' }] },
+                    { featureType: 'landscape', elementType: 'geometry', stylers: [{ color: '#f8fafc' }] },
+                    { featureType: 'poi', stylers: [{ visibility: 'off' }] },
+                    { featureType: 'road', elementType: 'labels', stylers: [{ visibility: 'off' }] }
+                ],
+                zoomControl: true,
+                mapTypeControl: false,
+                streetViewControl: false,
+                fullscreenControl: true
+            });
+
+            // Add DBS centers
+            centers.forEach(center => {
+                new google.maps.Marker({
+                    position: { lat: center.lat, lng: center.lon },
+                    map: map,
+                    icon: {
+                        path: google.maps.SymbolPath.CIRCLE,
+                        scale: 8,
+                        fillColor: '#f59e0b',
+                        fillOpacity: 1,
+                        strokeColor: 'white',
+                        strokeWeight: 3
+                    },
+                    title: 'DBS Center',
+                    zIndex: 1000
+                });
+            });
+
+            // Draw patient flows
+            flowsData.forEach(flow => {
+                const arrowScale = flow.distance > 300 ? 4.0 : 3.0;
+
+                const lineSymbol = {
+                    path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
+                    scale: arrowScale,
+                    strokeColor: flow.color,
+                    fillColor: flow.color,
+                    fillOpacity: 1
+                };
+
+                new google.maps.Polyline({
+                    path: [
+                        { lat: flow.from_lat, lng: flow.from_lng },
+                        { lat: flow.to_lat, lng: flow.to_lng }
+                    ],
+                    geodesic: true,
+                    strokeColor: flow.color,
+                    strokeOpacity: flow.opacity,
+                    strokeWeight: flow.weight,
+                    icons: [{
+                        icon: lineSymbol,
+                        offset: '65%'
+                    }],
+                    map: map
+                });
+
+                // Patient origin marker
+                new google.maps.Marker({
+                    position: { lat: flow.from_lat, lng: flow.from_lng },
+                    map: map,
+                    icon: {
+                        path: google.maps.SymbolPath.CIRCLE,
+                        scale: 2.5,
+                        fillColor: flow.color,
+                        fillOpacity: 0.7,
+                        strokeColor: 'white',
+                        strokeWeight: 0.5
+                    },
+                    zIndex: 10
+                });
+            });
+        }
+
+        window.onload = initMap;
+    </script>
+</body>
+</html>

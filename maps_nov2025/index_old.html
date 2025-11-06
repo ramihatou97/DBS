@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DBS Access Dashboard - Current Database (936 Patients, Nov 2025)</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f8f9fa;
+        }
+
+        #header {
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            color: white;
+            padding: 32px 24px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 32px;
+            font-weight: 700;
+        }
+
+        .subtitle {
+            margin-top: 12px;
+            font-size: 16px;
+            opacity: 0.95;
+        }
+
+        .stats {
+            display: flex;
+            gap: 24px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 12px 20px;
+            border-radius: 8px;
+        }
+
+        .stat-number {
+            font-size: 28px;
+            font-weight: 700;
+        }
+
+        .stat-label {
+            font-size: 13px;
+            opacity: 0.9;
+            margin-top: 4px;
+        }
+
+        #nav-tabs {
+            background: white;
+            padding: 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            display: flex;
+            overflow-x: auto;
+            flex-wrap: wrap;
+        }
+
+        .tab {
+            padding: 18px 24px;
+            cursor: pointer;
+            border: none;
+            background: white;
+            color: #4b5563;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.2s;
+            border-bottom: 3px solid transparent;
+            white-space: nowrap;
+        }
+
+        .tab:hover {
+            background: #f3f4f6;
+            color: #1e40af;
+        }
+
+        .tab.active {
+            background: #eff6ff;
+            color: #1e40af;
+            border-bottom-color: #1e40af;
+        }
+
+        #map-container {
+            height: calc(100vh - 280px);
+            background: white;
+            position: relative;
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        #footer {
+            background: white;
+            padding: 20px;
+            text-align: center;
+            color: #6b7280;
+            font-size: 13px;
+            border-top: 1px solid #e5e7eb;
+        }
+
+        .footer-link {
+            color: #3b82f6;
+            text-decoration: none;
+        }
+
+        .footer-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div id="header">
+        <h1>🗺️ DBS Access Dashboard - Current Database</h1>
+        <div class="subtitle">
+            Deep Brain Stimulation Access Disparities Across Canada<br>
+            <strong>936 patients</strong> • <strong>513 FSAs</strong> • <strong>10 DBS Centers</strong> • <strong>11 Interactive Maps</strong>
+        </div>
+        <div class="stats">
+            <div class="stat-item">
+                <div class="stat-number">936</div>
+                <div class="stat-label">Total Patients (2019-2023)</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">513</div>
+                <div class="stat-label">FSAs with Patients</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">11/12</div>
+                <div class="stat-label">Provinces/Territories</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">63 km</div>
+                <div class="stat-label">Median Travel Distance</div>
+            </div>
+        </div>
+    </div>
+
+    <div id="nav-tabs">
+        <button class="tab active" onclick="showMap('map1')">Map 1: Travel Burden</button>
+        <button class="tab" onclick="showMap('map2')">Map 2: Vulnerability Index</button>
+        <button class="tab" onclick="showMap('map3')">Map 3: Indigenous Crisis</button>
+        <button class="tab" onclick="showMap('map4')">Map 4: Multi-Barrier Gaps</button>
+        <button class="tab" onclick="showMap('map5')">Map 5: Patient Flows</button>
+        <button class="tab" onclick="showMap('map6')">Map 6: Distance (Simple)</button>
+        <button class="tab" onclick="showMap('map7')">Map 7: Combined ⭐</button>
+        <button class="tab" onclick="showMap('map8')">Map 8: True Flows (936)</button>
+        <button class="tab" onclick="showMap('map9')">Map 9: Pie Charts</button>
+        <button class="tab" onclick="showMap('map10')">Map 10: Jittered</button>
+        <button class="tab" onclick="showMap('map11')">Map 11: Bypass</button>
+    </div>
+
+    <div id="map-container">
+        <iframe id="map-iframe" src="map1_travel_burden_heatmap.html"></iframe>
+    </div>
+
+    <div id="footer">
+        <p><strong>DBS Access Dashboard - November 2025</strong></p>
+        <p style="margin-top: 8px;">
+            Generated with current 936-patient database (2019-2023) |
+            All provinces and territories with clear border demarcation |
+            <span style="color: #1e40af; font-weight: 600;">⭐ Map 7 contains ALL 4 socioeconomic fields</span>
+        </p>
+        <p style="margin-top: 12px;">
+            Data Source: Final_database_05_11_25_FINAL.xlsx |
+            Statistics Canada 2021 Census |
+            Google Maps API
+        </p>
+    </div>
+
+    <script>
+        const mapFiles = {
+            'map1': 'map1_travel_burden_heatmap.html',
+            'map2': 'map2_vulnerability_index.html',
+            'map3': 'map3_indigenous_access_crisis.html',
+            'map4': 'map4_multibarrier_service_gaps.html',
+            'map5': 'map5_patient_flow_animated.html',
+            'map6': 'map6_distance_analysis_simplified.html',
+            'map7': 'map7_combined_multi-factor_analysis.html',
+            'map8': 'map8_true_patient_flows_936_patients.html',
+            'map9': 'map9_patient_flow_pie_chart_visualization.html',
+            'map10': 'map10_individual_patient_distribution_jittered.html',
+            'map11': 'map11_patient_bypass_analysis.html'
+        };
+
+        function showMap(mapId) {
+            // Update active tab
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            // Load map
+            const iframe = document.getElementById('map-iframe');
+            iframe.src = mapFiles[mapId];
+        }
+    </script>
+</body>
+</html>
