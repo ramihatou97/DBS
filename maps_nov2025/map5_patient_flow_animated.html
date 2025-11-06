@@ -242,8 +242,8 @@
 
             // Draw all flow lines (always visible)
             flowsData.forEach(flow => {
-                // Larger arrow scale for better visibility at zoom 3.5
-                const arrowScale = flow.distance > 500 ? 4.5 : (flow.distance > 300 ? 3.5 : 3.0);
+                // Refined arrow scale for cleaner appearance
+                const arrowScale = flow.distance > 500 ? 3.0 : (flow.distance > 300 ? 2.5 : 2.0);
 
                 const lineSymbol = {
                     path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW,

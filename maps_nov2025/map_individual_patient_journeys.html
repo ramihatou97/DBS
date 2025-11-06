@@ -176,8 +176,8 @@
 
             // Draw individual patient flows
             patientFlows.forEach(flow => {
-                // Arrow for direction
-                const arrowScale = flow.distance > 500 ? 3.5 : (flow.distance > 300 ? 3.0 : 2.5);
+                // Arrow for direction (refined scale for cleaner appearance)
+                const arrowScale = flow.distance > 500 ? 2.5 : (flow.distance > 300 ? 2.0 : 1.8);
 
                 const lineSymbol = {
                     path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
