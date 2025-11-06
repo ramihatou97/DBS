@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Deep Brain Stimulation (DBS) Access Disparity Analysis Dashboard - Canadian Geographic and Socioeconomic Analysis">
+    <title>DBS Access Disparity Dashboard | Canadian Analysis 2019-2023</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --aqua: #38B2AC;
+            --aqua-light: #B2F5EA;
+            --aqua-dark: #2C7A7B;
+            --charcoal: #1A1A1A;
+            --dark-gray: #2D3748;
+            --medium-gray: #4A5568;
+            --light-gray: #CBD5E0;
+            --bg-light: #F7FAFC;
+            --coral: #F6AD55;
+            --lavender: #9F7AEA;
+            --mint: #68D391;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, var(--bg-light) 0%, #E6FFFA 100%);
+            color: var(--charcoal);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--aqua-dark) 0%, var(--aqua) 100%);
+            color: white;
+            padding: 2rem 0;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            font-weight: 300;
+            opacity: 0.95;
+        }
+
+        nav {
+            background: white;
+            border-bottom: 3px solid var(--aqua);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 140px;
+            z-index: 999;
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            gap: 2rem;
+            overflow-x: auto;
+        }
+
+        .nav-link {
+            display: inline-block;
+            padding: 1rem 1.5rem;
+            color: var(--dark-gray);
+            text-decoration: none;
+            font-weight: 500;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            color: var(--aqua);
+            border-bottom-color: var(--aqua);
+            background: var(--aqua-light);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 3rem auto;
+            padding: 0 2rem;
+        }
+
+        section {
+            background: white;
+            border-radius: 12px;
+            padding: 3rem;
+            margin-bottom: 3rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.07);
+            border: 1px solid var(--light-gray);
+        }
+
+        section h2 {
+            font-size: 2rem;
+            color: var(--aqua-dark);
+            margin-bottom: 1rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 3px solid var(--aqua);
+        }
+
+        section h3 {
+            font-size: 1.5rem;
+            color: var(--dark-gray);
+            margin: 2rem 0 1rem;
+        }
+
+        section p {
+            color: var(--medium-gray);
+            margin-bottom: 1.5rem;
+            font-size: 1.05rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, var(--aqua-light) 0%, white 100%);
+            padding: 2rem;
+            border-radius: 8px;
+            border-left: 4px solid var(--aqua);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--aqua-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 0.95rem;
+            color: var(--medium-gray);
+            font-weight: 500;
+        }
+
+        .figure-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .figure-item {
+            background: var(--bg-light);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 2px solid var(--light-gray);
+        }
+
+        .figure-item:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 16px rgba(56, 178, 172, 0.2);
+            border-color: var(--aqua);
+        }
+
+        .figure-item img {
+            width: 100%;
+            height: auto;
+            display: block;
+            cursor: pointer;
+        }
+
+        .figure-caption {
+            padding: 1rem;
+            background: white;
+            font-size: 0.95rem;
+            color: var(--medium-gray);
+            font-weight: 500;
+        }
+
+        .figure-single {
+            background: var(--bg-light);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin: 2rem 0;
+            border: 2px solid var(--light-gray);
+        }
+
+        .figure-single img {
+            width: 100%;
+            height: auto;
+            display: block;
+            cursor: pointer;
+        }
+
+        .map-container {
+            background: var(--bg-light);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin: 2rem 0;
+            border: 2px solid var(--aqua);
+        }
+
+        .map-container iframe {
+            width: 100%;
+            height: 700px;
+            border: none;
+            display: block;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background: var(--aqua);
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: 2px solid var(--aqua);
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background: var(--aqua-dark);
+            border-color: var(--aqua-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(56, 178, 172, 0.3);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: var(--aqua);
+            border: 2px solid var(--aqua);
+        }
+
+        .btn-secondary:hover {
+            background: var(--aqua-light);
+        }
+
+        footer {
+            background: var(--dark-gray);
+            color: white;
+            padding: 3rem 0;
+            margin-top: 4rem;
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            text-align: center;
+        }
+
+        .footer-content p {
+            color: var(--light-gray);
+            margin-bottom: 0.5rem;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            overflow: auto;
+        }
+
+        .modal-content {
+            margin: 2% auto;
+            display: block;
+            max-width: 95%;
+            max-height: 95vh;
+            animation: zoom 0.3s;
+        }
+
+        @keyframes zoom {
+            from {transform: scale(0.5); opacity: 0;}
+            to {transform: scale(1); opacity: 1;}
+        }
+
+        .close {
+            position: absolute;
+            top: 20px;
+            right: 40px;
+            color: white;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            z-index: 2001;
+        }
+
+        .close:hover {
+            color: var(--aqua-light);
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, var(--aqua-light) 0%, white 100%);
+            border-left: 4px solid var(--aqua);
+            padding: 1.5rem;
+            margin: 2rem 0;
+            border-radius: 6px;
+        }
+
+        .highlight-box h4 {
+            color: var(--aqua-dark);
+            margin-bottom: 0.75rem;
+            font-size: 1.2rem;
+        }
+
+        .highlight-box ul {
+            margin-left: 1.5rem;
+            color: var(--medium-gray);
+        }
+
+        .highlight-box li {
+            margin-bottom: 0.5rem;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.75rem;
+            }
+
+            .subtitle {
+                font-size: 0.95rem;
+            }
+
+            section {
+                padding: 2rem 1.5rem;
+            }
+
+            .figure-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-container {
+                gap: 1rem;
+            }
+
+            .nav-link {
+                padding: 0.75rem 1rem;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <h1>🧠 DBS Access Disparity Dashboard</h1>
+            <p class="subtitle">Geographic and Socioeconomic Analysis of Deep Brain Stimulation Access in Canada (2019-2023)</p>
+        </div>
+    </header>
+
+    <nav>
+        <div class="nav-container">
+            <a href="#overview" class="nav-link active">Overview</a>
+            <a href="#geographic" class="nav-link">Geographic</a>
+            <a href="#disparities" class="nav-link">Disparities</a>
+            <a href="#provincial" class="nav-link">Provincial</a>
+            <a href="#regression" class="nav-link">Statistics</a>
+            <a href="#maps" class="nav-link">Maps</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <section id="overview">
+            <h2>📊 Executive Summary</h2>
+            <p>Comprehensive analysis of Deep Brain Stimulation (DBS) access disparities across Canada from 2019 to 2023.</p>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">936</div>
+                    <div class="stat-label">Total DBS Cases</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">5 Years</div>
+                    <div class="stat-label">Study Period</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">10.09×</div>
+                    <div class="stat-label">Max Disparity Ratio</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">13</div>
+                    <div class="stat-label">Provinces & Territories</div>
+                </div>
+            </div>
+
+            <div class="highlight-box">
+                <h4>🎯 Key Findings</h4>
+                <ul>
+                    <li><strong>Geographic Disparity:</strong> Distance increases 10× with Indigenous ancestry (>10%)</li>
+                    <li><strong>Provincial Variation:</strong> Ontario 1.88× national rate, BC/MB severely underutilized</li>
+                    <li><strong>Rural-Urban Gap:</strong> Rural patients face longer distances and reduced access</li>
+                    <li><strong>Socioeconomic Impact:</strong> Lower income correlates with reduced access</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="geographic">
+            <h2>🗺️ Geographic Distribution</h2>
+            <div class="figure-grid">
+                <div class="figure-item">
+                    <img src="Figure1A_Geographic_Distribution_Basic.png" alt="Geographic Distribution" onclick="openModal(this.src)">
+                    <div class="figure-caption">Basic geographic distribution (936 cases)</div>
+                </div>
+                <div class="figure-item">
+                    <img src="Figure1B_Geographic_Density_Heatmap.png" alt="Density Heatmap" onclick="openModal(this.src)">
+                    <div class="figure-caption">Patient density heatmap</div>
+                </div>
+                <div class="figure-item">
+                    <img src="Figure1E_Age_Distribution_Geography.png" alt="Age Distribution" onclick="openModal(this.src)">
+                    <div class="figure-caption">Age distribution by geography</div>
+                </div>
+                <div class="figure-item">
+                    <img src="Figure1F_Rural_vs_Urban.png" alt="Rural vs Urban" onclick="openModal(this.src)">
+                    <div class="figure-caption">Rural vs urban access patterns</div>
+                </div>
+            </div>
+        </section>
+
+        <section id="disparities">
+            <h2>⚖️ Access Disparities</h2>
+            <div class="figure-single">
+                <img src="figures/Fig1_Indigenous_Disparity_Gradient.png" alt="Indigenous Disparity" onclick="openModal(this.src)">
+                <div class="figure-caption">Indigenous disparity gradient showing exponential distance increase</div>
+            </div>
+            <div class="figure-single">
+                <img src="figures/Fig5_Distance_Distribution.png" alt="Distance Distribution" onclick="openModal(this.src)">
+                <div class="figure-caption">Distribution and cumulative analysis of driving distances</div>
+            </div>
+        </section>
+
+        <section id="provincial">
+            <h2>🏛️ Provincial Analysis</h2>
+            <div class="figure-single">
+                <img src="figures/Fig3_Provincial_Comparison.png" alt="Provincial Comparison" onclick="openModal(this.src)">
+                <div class="figure-caption">Four-panel provincial comparison</div>
+            </div>
+            <div class="figure-single">
+                <img src="Figure3_FOREST_PLOT_WITH_CI.png" alt="Forest Plot" onclick="openModal(this.src)">
+                <div class="figure-caption">Provincial rate ratios with 95% confidence intervals</div>
+            </div>
+        </section>
+
+        <section id="regression">
+            <h2>📈 Statistical Analysis</h2>
+            <div class="figure-single">
+                <img src="figures/Fig2_Regression_Coefficients.png" alt="Regression" onclick="openModal(this.src)">
+                <div class="figure-caption">Regression coefficients with confidence intervals</div>
+            </div>
+            <div class="figure-single">
+                <img src="figures/Fig10_Correlation_Matrix.png" alt="Correlation" onclick="openModal(this.src)">
+                <div class="figure-caption">Correlation matrix heatmap</div>
+            </div>
+        </section>
+
+        <section id="maps">
+            <h2>🌐 Interactive Maps</h2>
+            <div class="map-container">
+                <iframe src="map_current_patient_flows_nov2025.html"></iframe>
+            </div>
+            <p style="text-align: center; margin-top: 1rem;">
+                <a href="map_current_patient_flows_nov2025.html" target="_blank" class="btn">Open Full Screen</a>
+            </p>
+        </section>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <p><strong>DBS Access Disparity Dashboard</strong></p>
+            <p>Canadian Geographic and Socioeconomic Analysis (2019-2023)</p>
+            <p style="margin-top: 1rem; opacity: 0.5;">© 2025 | Research & Educational Use</p>
+        </div>
+    </footer>
+
+    <div id="imageModal" class="modal" onclick="closeModal()">
+        <span class="close">&times;</span>
+        <img class="modal-content" id="modalImg">
+    </div>
+
+    <script>
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                document.querySelector(targetId).scrollIntoView({ behavior: 'smooth' });
+                document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        function openModal(src) {
+            document.getElementById('imageModal').style.display = 'block';
+            document.getElementById('modalImg').src = src;
+        }
+
+        function closeModal() {
+            document.getElementById('imageModal').style.display = 'none';
+        }
+
+        document.addEventListener('keydown', (e) => e.key === 'Escape' && closeModal());
+    </script>
+</body>
+</html>
